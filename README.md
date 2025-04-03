@@ -4,8 +4,8 @@
 *Объединяем тех, кто хочет помогать, с теми, кто в этом нуждается*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-![GitHub last commit](https://img.shields.io/github/last-commit/yourusername/helpwave)
-![GitHub stars](https://img.shields.io/github/stars/yourusername/helpwave?style=social)
+![GitHub last commit](https://img.shields.io/github/last-commit/RedstrikeRF/helpwave)
+![GitHub stars](https://img.shields.io/github/stars/RedstrikeRF/helpwave?style=social)
 
 ---
 
