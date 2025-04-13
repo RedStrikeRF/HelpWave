@@ -1,10 +1,12 @@
+import { Providers } from '@app/providers';
+import { AppRoutes } from '@app/router/AppRoutes';
 import './App.scss';
 
 function App() {
   return (
-    <div className="App">
-      Начало работы над HelpWave
-    </div>
+    <Providers>
+      <AppRoutes />
+    </Providers>
   );
 }
 

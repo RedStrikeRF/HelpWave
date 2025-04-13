@@ -1,9 +1,14 @@
 import { ReactNode } from 'react';
-import { RouteObject } from 'react-router-dom';
 
-export type RouteConfig = {
+export interface PageRoute {
   path: string;
   element: ReactNode;
-  private?: boolean;
+  private: boolean;
+  layout?: ReactNode;
   redirectTo?: string;
-} & RouteObject;
+}
+
+export type PrivateRouteProps = {
+  children: ReactNode;
+  redirectTo?: string;
+};
