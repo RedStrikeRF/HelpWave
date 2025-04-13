@@ -5,7 +5,7 @@ export const Header = () => {
     <header className="header">
       <a className="header__logo" href="#">logo</a>
       <ul>
-        ...
+        Тест хедера
       </ul>
     </header>
   )

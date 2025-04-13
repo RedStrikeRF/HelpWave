@@ -5,6 +5,7 @@ export const Input = ({
   className,
   children,
   placeholder,
+  value,
   type = 'text'
 }: InputProps) => {
   return (
@@ -15,6 +16,7 @@ export const Input = ({
         onChange={onChange}
         className={className}
         placeholder={placeholder}
+        value={value}
       />
     </div>
   );
