@@ -6,4 +6,5 @@ export interface InputProps {
   children?: ReactNode;
   placeholder?: string;
   type?: string;
+  value?: string;
 }
