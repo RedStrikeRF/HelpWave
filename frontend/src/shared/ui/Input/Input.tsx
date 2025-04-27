@@ -6,7 +6,8 @@ export const Input = ({
   children,
   placeholder,
   value,
-  type = 'text'
+  type = 'text',
+  disabled
 }: InputProps) => {
   return (
     <div>
@@ -17,6 +18,7 @@ export const Input = ({
         className={className}
         placeholder={placeholder}
         value={value}
+        disabled={disabled}
       />
     </div>
   );
