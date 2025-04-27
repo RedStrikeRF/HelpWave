@@ -1,17 +1,14 @@
 import { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-
+import { useAppSelector } from '@app/store/hooks';
 import { PrivateRouteProps } from './types';
 
-// TODO: сделать отображение нормальное логики проверки реги пользователя
-const isAuthenticated = () => {
-  return Boolean(localStorage.getItem('token'));
-};
 
 export const PrivateRoute = ({ children, redirectTo = '/login' }: PrivateRouteProps) => {
   const location = useLocation();
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
 
-  if (!isAuthenticated()) {
+  if (!isAuthenticated) {
     return <Navigate to={redirectTo} state={{ from: location }} replace />;
   }
 
