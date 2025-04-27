@@ -1,0 +1,20 @@
+@import './fonts.css';
+@import './colors.css';
+
+* {
+  box-sizing: border-box;
+  
+  text-decoration: none;
+
+  color: black;
+
+  scroll-behavior: smooth;
+
+  margin: 0;
+  padding: 0;
+
+  outline: none;
+  border: none;
+  
+  /* background-color: transparent; */
+}

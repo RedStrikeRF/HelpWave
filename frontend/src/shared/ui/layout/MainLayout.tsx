@@ -5,7 +5,7 @@ export const MainLayout = () => {
   return (
     <div>
       <Header />
-      <main>
+      <main className='main__content'>
         <Outlet />
       </main>
     </div>

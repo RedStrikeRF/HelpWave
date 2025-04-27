@@ -1,6 +1,6 @@
 import './LoginPage.scss';
 import { useBehavior } from '../model';
-import { Input, Button } from '@shared/ui';
+import { Input, Button, Logo } from '@shared/ui';
 import flowers from '@shared/assets/flowers.svg';
 import logo from '@shared/assets/logo.svg';
 
@@ -19,7 +19,7 @@ export const LoginPage = () => {
   return (
     <div className="login">
       <header className="login__header">
-        <img src={logo} alt="Логотип" className="logo" />
+        <Logo />
       </header>
       <div className="login__container">
         <form className="login__form" onSubmit={handleLogin}>

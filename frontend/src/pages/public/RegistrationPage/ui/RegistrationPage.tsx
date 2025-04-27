@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import { useBehavior } from '../model';
-import { Input, Button } from '@shared/ui';
+import { Input, Button, Logo } from '@shared/ui';
 import "./RegistrationPage.scss";
 import logo from '@shared/assets/logo.svg';
 
@@ -28,7 +28,7 @@ export const RegistrationPage = () => {
   return (
     <div className="register">
       <header className="register__header">
-        <img src={logo} alt="Логотип" className="logo" />
+        <Logo />
       </header>
 
       <div className="register__container">
