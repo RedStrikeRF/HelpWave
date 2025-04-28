@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-# Create your models here.
+
 class Volunteer(models.Model):
     """
     Модель для волонтера.
@@ -48,8 +48,6 @@ class Meeting(models.Model):
     start_time = models.DateTimeField(help_text="Дата и время начала встречи.")
     end_time = models.DateTimeField(help_text="Дата и время окончания встречи.")
     max_participants = models.PositiveIntegerField(default=0, help_text="Максимальное количество участников. 0 - неограничено.")
-    # TODO: добавить поле для загрузки изображений
-    #image = models.ImageField(upload_to='meetings/', blank=True, null=True)
 
     # Поля для поиска и фильтрации (пункт 2.3)
 
