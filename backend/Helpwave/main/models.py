@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.contrib.auth import get_user_model
+from model_utils import FieldTracker
 
 User = get_user_model()
 
@@ -82,5 +83,15 @@ class VolunteerApplication(models.Model):
         verbose_name_plural = "Заявки волонтеров"
         unique_together = ('volunteer', 'meeting')  # Один пользователь - одна заявка на мероприятие
 
+    tracker = FieldTracker(fields=['status'])  # Добавить это
+
+    def save(self, *args, **kwargs):
+        old_status = self.tracker.previous('status')
+        super().save(*args, **kwargs)
+        if old_status != self.status:
+            from .tasks import send_status_email  # Импорт здесь чтобы избежать circular import
+            send_status_email.delay(self.id)
     def __str__(self):
         return f"{self.volunteer.username} -> {self.meeting.title} ({self.get_status_display()})"
+
+from . import signals
