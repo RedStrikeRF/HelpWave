@@ -1,48 +1,57 @@
+from datetime import timezone
+
 from django.http import HttpResponse
-from django.shortcuts import render
-from rest_framework import serializers, viewsets, permissions
+from django.shortcuts import render, get_object_or_404
+from rest_framework import serializers, viewsets, permissions, generics, status
 from django.contrib.auth import get_user_model
+from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
+from datetime import datetime
+from .models import Volunteer, Organizer, Meeting, VolunteerApplication
+from .serializers import UserSerializer, VolunteerSerializer, OrganizerSerializer, MeetingSerializer, \
+    VolunteerApplicationSerializer, VolunteerApplicationUpdateSerializer, VolunteerApplicationCreateSerializer
 
-from .models import Volunteer, Organizer, Meeting
-from .serializers import UserSerializer, VolunteerSerializer, OrganizerSerializer, MeetingSerializer
 User = get_user_model()
+
 
 # Create your views here.
 # ViewSets
 def home(request):
     return HttpResponse("Welcome to Helpwave API! Try /token/ for authentication.")
+
+
 class UserViewSet(viewsets.ModelViewSet):  # Changed to inherit from ModelViewSet
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAdminUser]
+
 
 class VolunteerViewSet(viewsets.ModelViewSet):
     queryset = Volunteer.objects.all()
     serializer_class = VolunteerSerializer
 
     def get_permissions(self):
-        #Разрешаем создавать пользователей всем, а остальное - только аутентифицированным пользователям.
+        # Разрешаем создавать пользователей всем, а остальное - только аутентифицированным пользователям.
         if self.action == 'create':
             permission_classes = [permissions.AllowAny]
         else:
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
+
 
 class OrganizerViewSet(viewsets.ModelViewSet):
     queryset = Organizer.objects.all()
     serializer_class = OrganizerSerializer
 
     def get_permissions(self):
-        #Разрешаем создавать пользователей всем, а остальное - только аутентифицированным пользователям.
+        # Разрешаем создавать пользователей всем, а остальное - только аутентифицированным пользователям.
         if self.action == 'create':
             permission_classes = [permissions.AllowAny]
         else:
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
-
 
 
 class MeetingViewSet(viewsets.ModelViewSet):
@@ -72,10 +81,9 @@ class MeetingViewSet(viewsets.ModelViewSet):
             raise PermissionDenied("Вы должны быть организатором для обновления встреч.")
 
         if instance.organizer != organizer:
-             raise PermissionDenied("Вы должны быть организатором встречи для ее обновления.")
+            raise PermissionDenied("Вы должны быть организатором встречи для ее обновления.")
 
         return super().update(request, *args, **kwargs)
-
 
     def destroy(self, request, *args, **kwargs):
         """
@@ -91,10 +99,9 @@ class MeetingViewSet(viewsets.ModelViewSet):
             raise PermissionDenied("Вы должны быть организатором для удаления встреч.")
 
         if instance.organizer != organizer:
-             raise PermissionDenied("Вы должны быть организатором встречи для ее удаления.")
+            raise PermissionDenied("Вы должны быть организатором встречи для ее удаления.")
 
         return super().destroy(request, *args, **kwargs)
-
 
     def perform_create(self, serializer):
         user = self.request.user
@@ -131,3 +138,71 @@ class ObtainTokenPairWithVolunteerOrOrganizerView(TokenObtainPairView):
                 return Response({"error": "User not found"}, status=400)
 
         return response
+
+
+class VolunteerApplicationViewSet(viewsets.ModelViewSet):
+    queryset = VolunteerApplication.objects.all()
+    serializer_class = VolunteerApplicationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if self.action == 'by_meeting':
+            meeting_id = self.kwargs.get('meeting_id')
+            return VolunteerApplication.objects.filter(
+                meeting_id=meeting_id,
+                meeting__organizer__user=user
+            )
+        return VolunteerApplication.objects.filter(volunteer=user)
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return VolunteerApplicationCreateSerializer
+        elif self.action in ['update', 'partial_update']:
+            return VolunteerApplicationUpdateSerializer
+        return VolunteerApplicationSerializer
+
+    def perform_create(self, serializer):
+        meeting_id = self.request.data.get('meeting')
+        meeting = get_object_or_404(Meeting, pk=meeting_id)
+
+        if VolunteerApplication.objects.filter(volunteer=self.request.user, meeting=meeting).exists():
+            raise serializers.ValidationError("Вы уже подавали заявку на это мероприятие")
+
+
+        serializer.save(volunteer=self.request.user, meeting=meeting)
+
+    def perform_update(self, serializer):
+        if 'status' in serializer.validated_data:
+            serializer.save(processed_at=datetime.now())
+        else:
+            serializer.save()
+
+    @action(detail=False, methods=['get'], url_path='by-meeting/(?P<meeting_id>[^/.]+)')
+    def by_meeting(self, request, meeting_id=None):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
+    def apply(self, request, pk=None):
+        meeting = self.get_object()
+        data = {'meeting': meeting.id, **request.data}
+
+        serializer = VolunteerApplicationCreateSerializer(
+            data=data,
+            context={'request': request}
+        )
+
+        if serializer.is_valid():
+            if VolunteerApplication.objects.filter(volunteer=request.user, meeting=meeting).exists():
+                return Response(
+                    {"detail": "Вы уже подавали заявку на это мероприятие"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+
+
+            serializer.save(volunteer=request.user, meeting=meeting)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

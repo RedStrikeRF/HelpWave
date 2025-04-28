@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -49,10 +50,37 @@ class Meeting(models.Model):
     end_time = models.DateTimeField(help_text="Дата и время окончания встречи.")
     max_participants = models.PositiveIntegerField(default=0, help_text="Максимальное количество участников. 0 - неограничено.")
 
-    # Поля для поиска и фильтрации (пункт 2.3)
-
     def __str__(self):
         return f"Встреча: {self.title} (Организатор: {self.organizer.user.username})"
 
     class Meta:
         verbose_name = "Встреча"
+
+
+class VolunteerApplication(models.Model):
+    APPLICATION_STATUS = [
+        ('pending', 'На рассмотрении'),
+        ('approved', 'Подтверждена'),
+        ('rejected', 'Отклонена'),
+    ]
+
+    volunteer = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                on_delete=models.CASCADE,
+                                related_name='applications')
+    meeting = models.ForeignKey('Meeting',
+                              on_delete=models.CASCADE,
+                              related_name='applications')
+    status = models.CharField(max_length=10,
+                            choices=APPLICATION_STATUS,
+                            default='pending')
+    applied_at = models.DateTimeField(auto_now_add=True)
+    processed_at = models.DateTimeField(null=True, blank=True)
+    organizer_comment = models.TextField(blank=True, verbose_name="Комментарий организатора")
+
+    class Meta:
+        verbose_name = "Заявка волонтера"
+        verbose_name_plural = "Заявки волонтеров"
+        unique_together = ('volunteer', 'meeting')  # Один пользователь - одна заявка на мероприятие
+
+    def __str__(self):
+        return f"{self.volunteer.username} -> {self.meeting.title} ({self.get_status_display()})"

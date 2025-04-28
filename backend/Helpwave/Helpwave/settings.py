@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,8 +24,6 @@ SECRET_KEY = 'django-insecure-8^sm)zeji3u^02+@32eig-!6n3!hhr2-thmcpd_)%8wv(wqt(t
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -132,3 +130,11 @@ REST_FRAMEWORK = {
              'rest_framework_simplejwt.authentication.JWTAuthentication',
          ]
      }
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # Увеличиваем до 1 часа
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),     # Увеличиваем до 7 дней
+    'ROTATE_REFRESH_TOKENS': True,                  # Автоматически обновлять refresh-токены
+    'BLACKLIST_AFTER_ROTATION': True,               # Старые токены в черный список
+}
