@@ -8,6 +8,7 @@ import { RegistrationPage } from '@pages/public/RegistrationPage';
 import { ProfilePage } from '@pages/public/ProfilePage'; // Импортируем компонент страницы профиля
 
 import { PrivateRoute } from './PrivateRoute';
+import { EventsPage } from '@pages/public/EventsPage';
 
 export const routes: RouteObject[] = [
   {
@@ -46,6 +47,12 @@ export const routes: RouteObject[] = [
           <PrivateRoute>
             <ProfilePage />
           </PrivateRoute>
+        ),
+      },
+      {
+        path: 'events',
+        element: (
+          <EventsPage />
         ),
       },
     ],
