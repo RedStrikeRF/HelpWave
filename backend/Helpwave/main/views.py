@@ -9,9 +9,10 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from datetime import datetime
-from .models import Volunteer, Organizer, Meeting, VolunteerApplication
+from .models import Volunteer, Organizer, Meeting, VolunteerApplication, Review
 from .serializers import UserSerializer, VolunteerSerializer, OrganizerSerializer, MeetingSerializer, \
-    VolunteerApplicationSerializer, VolunteerApplicationUpdateSerializer, VolunteerApplicationCreateSerializer
+    VolunteerApplicationSerializer, VolunteerApplicationUpdateSerializer, VolunteerApplicationCreateSerializer, \
+    ReviewSerializer
 
 User = get_user_model()
 
@@ -154,6 +155,7 @@ class VolunteerApplicationViewSet(viewsets.ModelViewSet):
                 meeting__organizer__user=user
             )
         return VolunteerApplication.objects.filter(volunteer=user)
+
     def get_serializer_class(self):
         if self.action == 'create':
             return VolunteerApplicationCreateSerializer
@@ -167,7 +169,6 @@ class VolunteerApplicationViewSet(viewsets.ModelViewSet):
 
         if VolunteerApplication.objects.filter(volunteer=self.request.user, meeting=meeting).exists():
             raise serializers.ValidationError("Вы уже подавали заявку на это мероприятие")
-
 
         serializer.save(volunteer=self.request.user, meeting=meeting)
 
@@ -200,9 +201,48 @@ class VolunteerApplicationViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-
-
             serializer.save(volunteer=request.user, meeting=meeting)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ReviewViewSet(viewsets.ModelViewSet):
+    serializer_class = ReviewSerializer
+    queryset = Review.objects.all()
+
+    def get_organizer(self, user):
+        try:
+            return Organizer.objects.get(user=user)
+        except Organizer.DoesNotExist:
+            raise PermissionDenied("You must be an organizer to perform this action.")
+
+    def get_queryset(self):
+        organizer = self.get_organizer(self.request.user)
+        return Review.objects.filter(organizer=organizer)
+
+    def create(self, request, *args, **kwargs):
+        organizer = self.get_organizer(request.user)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(organizer=organizer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        organizer = self.get_organizer(request.user)
+
+        if instance.organizer != organizer:
+            raise PermissionDenied("You can only update your own reviews.")
+
+        return super().update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        organizer = self.get_organizer(request.user)
+
+        if instance.organizer != organizer:
+            raise PermissionDenied("You can only delete your own reviews.")
+
+        return super().destroy(request, *args, **kwargs)

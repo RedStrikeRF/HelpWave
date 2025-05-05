@@ -1,6 +1,6 @@
 from rest_framework import serializers, viewsets, permissions
 from django.contrib.auth import get_user_model
-from .models import Volunteer, Organizer, Meeting, VolunteerApplication
+from .models import Volunteer, Organizer, Meeting, VolunteerApplication, Review
 
 User = get_user_model()
 
@@ -133,3 +133,10 @@ class VolunteerApplicationUpdateSerializer(serializers.ModelSerializer):
         model = VolunteerApplication
         fields = ['status', 'organizer_comment']
         extra_kwargs = {'organizer_comment': {'required': False}}
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ['id', 'volunteer', 'meeting', 'rating', 'comment', 'created_at', 'updated_at']
+        read_only_fields = ['organizer', 'created_at', 'updated_at']

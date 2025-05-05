@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth import get_user_model
 from model_utils import FieldTracker
@@ -93,5 +94,15 @@ class VolunteerApplication(models.Model):
             send_status_email.delay(self.id)
     def __str__(self):
         return f"{self.volunteer.username} -> {self.meeting.title} ({self.get_status_display()})"
+
+
+class Review(models.Model):
+    organizer = models.ForeignKey(Organizer, on_delete=models.CASCADE)
+    volunteer = models.ForeignKey(Volunteer, on_delete=models.CASCADE)
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+    rating = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 from . import signals
