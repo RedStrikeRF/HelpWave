@@ -12,7 +12,7 @@ from .views import (
     OrganizerViewSet,
     MeetingViewSet,
     ObtainTokenPairWithVolunteerOrOrganizerView,
-    VolunteerApplicationViewSet, ReviewViewSet,
+    VolunteerApplicationViewSet, ReviewViewSet, PDFDocumentViewSet,
 )
 
 router = DefaultRouter()
@@ -22,6 +22,7 @@ router.register(r'organizers', OrganizerViewSet)
 router.register(r'meetings', MeetingViewSet)
 router.register(r'applications', VolunteerApplicationViewSet, basename='applications')
 router.register(r'reviews', ReviewViewSet, basename='review')
+router.register(r'pdf-documents', PDFDocumentViewSet, basename='pdfdocument')
 
 urlpatterns = [
     # Маршрут для получения токена (JWT)

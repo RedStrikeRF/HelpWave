@@ -1,6 +1,6 @@
 from datetime import timezone
 
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.shortcuts import render, get_object_or_404
 from rest_framework import serializers, viewsets, permissions, generics, status
 from django.contrib.auth import get_user_model
@@ -9,10 +9,10 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from datetime import datetime
-from .models import Volunteer, Organizer, Meeting, VolunteerApplication, Review
+from .models import Volunteer, Organizer, Meeting, VolunteerApplication, Review, PDFDocument
 from .serializers import UserSerializer, VolunteerSerializer, OrganizerSerializer, MeetingSerializer, \
     VolunteerApplicationSerializer, VolunteerApplicationUpdateSerializer, VolunteerApplicationCreateSerializer, \
-    ReviewSerializer
+    ReviewSerializer, PDFDocumentSerializer
 
 User = get_user_model()
 
@@ -246,3 +246,64 @@ class ReviewViewSet(viewsets.ModelViewSet):
             raise PermissionDenied("You can only delete your own reviews.")
 
         return super().destroy(request, *args, **kwargs)
+
+
+class PDFDocumentViewSet(viewsets.ModelViewSet):
+    serializer_class = PDFDocumentSerializer
+    queryset = PDFDocument.objects.all()
+
+    def get_organizer(self, user):
+        try:
+            return Organizer.objects.get(user=user)
+        except Organizer.DoesNotExist:
+            raise PermissionDenied("Вы должны быть организатором для выполнения этого действия.")
+
+    # Main permission check method
+    def check_organizer_permissions(self, request):
+        if not request.user.is_authenticated:
+            raise PermissionDenied("Требуется аутентификация.")
+
+        try:
+            return Organizer.objects.get(user=request.user)
+        except Organizer.DoesNotExist:
+            raise PermissionDenied("Вы должны быть организатором для выполнения этого действия.")
+
+    def get_queryset(self):
+        organizer = self.check_organizer_permissions(self.request.user)
+        return PDFDocument.objects.filter(organizer=organizer)
+
+    def perform_create(self, serializer):
+        organizer = self.check_organizer_permissions(self.request.user)
+        serializer.save(organizer=organizer)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        organizer = self.check_organizer_permissions(request.user)
+
+        if instance.organizer != organizer:
+            raise PermissionDenied("Вы можете изменять только свои собственные документы.")
+
+        return super().update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        organizer = self.check_organizer_permissions(request.user)
+
+        if instance.organizer != organizer:
+            raise PermissionDenied("Вы можете удалять только свои собственные документы.")
+
+        instance.pdf_file.delete()  # Delete the actual file
+        return super().destroy(request, *args, **kwargs)
+
+    @action(detail=True, methods=['get'])
+    def download(self, request, pk=None):
+        # Check if user is a volunteer
+        try:
+            volunteer = Volunteer.objects.get(user=request.user)
+        except Volunteer.DoesNotExist:
+            raise PermissionDenied("Только волонтеры могут скачивать документы.")
+
+        pdf_doc = self.get_object()
+        response = FileResponse(pdf_doc.pdf_file)
+        response['Content-Disposition'] = f'attachment; filename="{pdf_doc.title}.pdf"'
+        return response

@@ -1,6 +1,6 @@
 from rest_framework import serializers, viewsets, permissions
 from django.contrib.auth import get_user_model
-from .models import Volunteer, Organizer, Meeting, VolunteerApplication, Review
+from .models import Volunteer, Organizer, Meeting, VolunteerApplication, Review, PDFDocument
 
 User = get_user_model()
 
@@ -139,4 +139,12 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ['id', 'volunteer', 'meeting', 'rating', 'comment', 'created_at', 'updated_at']
+        read_only_fields = ['organizer', 'created_at', 'updated_at']
+
+
+
+class PDFDocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PDFDocument
+        fields = ['id', 'title', 'pdf_file', 'created_at', 'updated_at']
         read_only_fields = ['organizer', 'created_at', 'updated_at']

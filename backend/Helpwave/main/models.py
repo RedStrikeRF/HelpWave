@@ -105,4 +105,13 @@ class Review(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+class PDFDocument(models.Model):
+    organizer = models.ForeignKey(Organizer, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    pdf_file = models.FileField(upload_to='pdf_documents/')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
 from . import signals
