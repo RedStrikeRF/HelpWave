@@ -1,5 +1,8 @@
+from django.conf import settings
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth import get_user_model
+from model_utils import FieldTracker
 
 User = get_user_model()
 
@@ -49,10 +52,66 @@ class Meeting(models.Model):
     end_time = models.DateTimeField(help_text="Дата и время окончания встречи.")
     max_participants = models.PositiveIntegerField(default=0, help_text="Максимальное количество участников. 0 - неограничено.")
 
-    # Поля для поиска и фильтрации (пункт 2.3)
-
     def __str__(self):
         return f"Встреча: {self.title} (Организатор: {self.organizer.user.username})"
 
     class Meta:
         verbose_name = "Встреча"
+
+
+class VolunteerApplication(models.Model):
+    APPLICATION_STATUS = [
+        ('pending', 'На рассмотрении'),
+        ('approved', 'Подтверждена'),
+        ('rejected', 'Отклонена'),
+    ]
+
+    volunteer = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                on_delete=models.CASCADE,
+                                related_name='applications')
+    meeting = models.ForeignKey('Meeting',
+                              on_delete=models.CASCADE,
+                              related_name='applications')
+    status = models.CharField(max_length=10,
+                            choices=APPLICATION_STATUS,
+                            default='pending')
+    applied_at = models.DateTimeField(auto_now_add=True)
+    processed_at = models.DateTimeField(null=True, blank=True)
+    organizer_comment = models.TextField(blank=True, verbose_name="Комментарий организатора")
+
+    class Meta:
+        verbose_name = "Заявка волонтера"
+        verbose_name_plural = "Заявки волонтеров"
+        unique_together = ('volunteer', 'meeting')  # Один пользователь - одна заявка на мероприятие
+
+    tracker = FieldTracker(fields=['status'])  # Добавить это
+
+    def save(self, *args, **kwargs):
+        old_status = self.tracker.previous('status')
+        super().save(*args, **kwargs)
+        if old_status != self.status:
+            from .tasks import send_status_email  # Импорт здесь чтобы избежать circular import
+            send_status_email.delay(self.id)
+    def __str__(self):
+        return f"{self.volunteer.username} -> {self.meeting.title} ({self.get_status_display()})"
+
+
+class Review(models.Model):
+    organizer = models.ForeignKey(Organizer, on_delete=models.CASCADE)
+    volunteer = models.ForeignKey(Volunteer, on_delete=models.CASCADE)
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+    rating = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class PDFDocument(models.Model):
+    organizer = models.ForeignKey(Organizer, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    pdf_file = models.FileField(upload_to='pdf_documents/')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+from . import signals

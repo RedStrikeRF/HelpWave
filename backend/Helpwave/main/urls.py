@@ -11,7 +11,8 @@ from .views import (
     VolunteerViewSet,
     OrganizerViewSet,
     MeetingViewSet,
-    ObtainTokenPairWithVolunteerOrOrganizerView
+    ObtainTokenPairWithVolunteerOrOrganizerView,
+    VolunteerApplicationViewSet, ReviewViewSet, PDFDocumentViewSet,
 )
 
 router = DefaultRouter()
@@ -19,7 +20,9 @@ router.register(r'users', UserViewSet)
 router.register(r'volunteers', VolunteerViewSet)
 router.register(r'organizers', OrganizerViewSet)
 router.register(r'meetings', MeetingViewSet)
-
+router.register(r'applications', VolunteerApplicationViewSet, basename='applications')
+router.register(r'reviews', ReviewViewSet, basename='review')
+router.register(r'pdf-documents', PDFDocumentViewSet, basename='pdfdocument')
 
 urlpatterns = [
     # Маршрут для получения токена (JWT)
@@ -30,5 +33,8 @@ urlpatterns = [
 
     # Маршрут для верификации токена (JWT)
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+
+
+
     path('', include(router.urls)),
 ]

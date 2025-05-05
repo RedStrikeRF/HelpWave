@@ -1,8 +1,9 @@
 from rest_framework import serializers, viewsets, permissions
 from django.contrib.auth import get_user_model
-from .models import Volunteer, Organizer, Meeting
+from .models import Volunteer, Organizer, Meeting, VolunteerApplication, Review, PDFDocument
 
 User = get_user_model()
+
 
 # Serializers
 class UserSerializer(serializers.ModelSerializer):
@@ -26,6 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(password)  # Хеширование пароля
         user.save()
         return user
+
 
 class VolunteerSerializer(serializers.ModelSerializer):
     user = UserSerializer()  # Вложенный сериализатор для User
@@ -92,15 +94,57 @@ class OrganizerSerializer(serializers.ModelSerializer):
 
         return instance
 
+
 class MeetingSerializer(serializers.ModelSerializer):
-    organizer = OrganizerSerializer(read_only=True) #Сериализует данные органайзера
+    organizer = OrganizerSerializer(read_only=True)  # Сериализует данные органайзера
 
     class Meta:
         model = Meeting
         fields = '__all__'
         read_only_fields = ('organizer',)
 
-# ViewSets
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+
+class VolunteerApplicationSerializer(serializers.ModelSerializer):
+    volunteer_username = serializers.CharField(source='volunteer.username', read_only=True)
+    meeting_title = serializers.CharField(source='meeting.title', read_only=True)
+    organizer_name = serializers.CharField(source='meeting.organizer.user.username', read_only=True)
+
+    class Meta:
+        model = VolunteerApplication
+        fields = [
+            'id', 'volunteer', 'volunteer_username', 'meeting', 'meeting_title',
+            'organizer_name', 'status', 'applied_at', 'processed_at', 'organizer_comment'
+        ]
+        read_only_fields = [
+            'volunteer', 'volunteer_username', 'meeting', 'meeting_title',
+            'organizer_name', 'applied_at', 'processed_at'
+        ]
+
+
+class VolunteerApplicationCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VolunteerApplication
+        fields = ['meeting', 'organizer_comment']
+        extra_kwargs = {'organizer_comment': {'required': False}}
+
+
+class VolunteerApplicationUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VolunteerApplication
+        fields = ['status', 'organizer_comment']
+        extra_kwargs = {'organizer_comment': {'required': False}}
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ['id', 'volunteer', 'meeting', 'rating', 'comment', 'created_at', 'updated_at']
+        read_only_fields = ['organizer', 'created_at', 'updated_at']
+
+
+
+class PDFDocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PDFDocument
+        fields = ['id', 'title', 'pdf_file', 'created_at', 'updated_at']
+        read_only_fields = ['organizer', 'created_at', 'updated_at']
