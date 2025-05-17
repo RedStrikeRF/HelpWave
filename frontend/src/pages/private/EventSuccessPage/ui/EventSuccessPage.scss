@@ -1,0 +1,46 @@
+.event-success-page {
+  margin-top: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  gap: var(--gap50px);
+
+  width: 100%;
+
+  &__title {
+    font-family: Kantumruy Pro;
+    font-weight: 700;
+    font-size: var(--fonts32px);
+    line-height: 100%;
+    text-align: center;
+    color: var(--color3);
+
+    max-width: 700px;
+  }
+
+  &__link {
+    font-family: Kantumruy Pro;
+    font-weight: 700;
+    font-size: var(--fonts32px);
+    line-height: 100%;
+    text-align: center;
+    color: var(--color2);
+    cursor: pointer;
+  }
+
+  &__button {
+    background: transparent;
+    font-family: Kantumruy Pro;
+    font-weight: 400;
+    font-size: var(--fonts32px);
+    line-height: 100%;
+    color: var(--color3);
+    cursor: pointer;
+  }
+
+  &__img {
+    user-select: none;
+  }
+}

@@ -1,14 +1,24 @@
 import { RouteObject } from 'react-router-dom';
 
 import { MainLayout } from '@shared/ui/layout/MainLayout';
+import { PrivateRoute } from './PrivateRoute';
 
+import { ProfilePage } from '@pages/public/ProfilePage';
+import { EventsPage } from '@pages/public/EventsPage';
+
+// Общие страницы
+import { NotificationPage } from '@pages/private/NotificationPage';
 import { LoginPage } from '@pages/public/LoginPage';
 import { HomePage } from '@pages/public/HomePage';
 import { RegistrationPage } from '@pages/public/RegistrationPage';
-import { ProfilePage } from '@pages/public/ProfilePage'; // Импортируем компонент страницы профиля
 
-import { PrivateRoute } from './PrivateRoute';
-import { EventsPage } from '@pages/public/EventsPage';
+// Страницы волонтерства
+import { EventPage as VolunteerEventPage } from '@pages/private/volunteer/EventPage';
+import { EventSuccessPage as VolunteerEventSuccessPage } from '@pages/private/EventSuccessPage';
+import { ActiveApplicationsPage as VolunteerActiveApplicationsPage } from '@pages/private/volunteer/ActiveApplicationsPage';
+
+// Страницы организатора
+
 
 export const routes: RouteObject[] = [
   {
@@ -23,37 +33,43 @@ export const routes: RouteObject[] = [
     path: '/',
     element: <MainLayout />,
     children: [
+      // Тут общие страницы
       {
         index: true,
         element: <HomePage />
       },
       {
-        path: 'dashboard',
-        element: (
-          <PrivateRoute>
-            <HomePage />
-          </PrivateRoute>
-        ),
+        path: '/notification',
+        element: <NotificationPage />,
       },
       {
-        path: 'profile',
-        element: (
-          <ProfilePage />
-        ),
+        path: 'event/success',
+        element: <VolunteerEventSuccessPage />,
       },
+      // TODO: Прописать все страницы волонтеров ниже
       {
-        path: 'profile/:userId',
-        element: (
-          <PrivateRoute>
-            <ProfilePage />
-          </PrivateRoute>
-        ),
-      },
+      path: 'volunteer',
+      children: [
+        {
+        path: 'event/:id',
+        element: <VolunteerEventPage />,
+        },
+        
+        {
+          path: 'active-applications',
+          element: <VolunteerActiveApplicationsPage />,
+        }
+        ]
+        },
+      // TODO: Прописать все страницы организаторов ниже
       {
-        path: 'events',
-        element: (
-          <EventsPage />
-        ),
+        path: 'organizer',
+        children: [
+          {
+            path: 'dashboard',
+            element: <h1>тостер</h1>
+          }
+        ]
       },
     ],
   },

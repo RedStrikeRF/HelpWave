@@ -1,0 +1,30 @@
+.notification-page {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: var(--gap25px);
+
+  flex-wrap: nowrap;
+
+  &__title {
+    font-family: Kantumruy Pro;
+    font-weight: 700;
+    font-size: var(--fonts36px);
+    line-height: 100%;
+    color: var(--color3);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--gap25px);
+    flex-wrap: nowrap;
+
+    width: 100%;
+  }
+}

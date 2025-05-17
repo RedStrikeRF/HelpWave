@@ -1,5 +1,8 @@
 @import './fonts.css';
 @import './colors.css';
+@import './radius.css';
+@import './fonts-size.css';
+@import './gap.css';
 
 * {
   box-sizing: border-box;
