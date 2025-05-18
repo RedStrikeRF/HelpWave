@@ -1,0 +1,14 @@
+.delete-button {
+  border: 3px solid var(--red);
+  border-radius: var(--border-radius-20px);
+  background-color: var(--color4);
+  cursor: pointer;
+
+  font-family: Kantumruy Pro;
+  font-weight: 700;
+  font-size: var(--fonts20px);
+  line-height: 100%;
+  color: var(--red);
+
+  padding: 15px;
+}

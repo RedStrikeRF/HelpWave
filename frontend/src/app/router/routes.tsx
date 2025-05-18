@@ -11,9 +11,9 @@ import { NotificationPage } from '@pages/private/NotificationPage';
 import { LoginPage } from '@pages/public/LoginPage';
 import { HomePage } from '@pages/public/HomePage';
 import { RegistrationPage } from '@pages/public/RegistrationPage';
+import { EventPage} from '@pages/private/EventPage';
 
 // Страницы волонтерства
-import { EventPage as VolunteerEventPage } from '@pages/private/volunteer/EventPage';
 import { EventSuccessPage as VolunteerEventSuccessPage } from '@pages/private/EventSuccessPage';
 import { ActiveApplicationsPage as VolunteerActiveApplicationsPage } from '@pages/private/volunteer/ActiveApplicationsPage';
 
@@ -46,18 +46,21 @@ export const routes: RouteObject[] = [
         path: 'event/success',
         element: <VolunteerEventSuccessPage />,
       },
+      {
+        path: 'event/:id',
+        element: <EventPage />,
+      },
       // TODO: Прописать все страницы волонтеров ниже
       {
       path: 'volunteer',
       children: [
         {
-        path: 'event/:id',
-        element: <VolunteerEventPage />,
-        },
-        
-        {
           path: 'active-applications',
           element: <VolunteerActiveApplicationsPage />,
+        },
+        {
+          path: 'event/:id',
+          element: <EventPage />,
         }
         ]
         },
@@ -66,9 +69,29 @@ export const routes: RouteObject[] = [
         path: 'organizer',
         children: [
           {
-            path: 'dashboard',
-            element: <h1>тостер</h1>
-          }
+            path: 'event/:id',
+            element: <EventPage />,
+          },
+          {
+            path: 'event/create',
+            element: <EventCreatePage />,
+          },
+          // {
+          //   path: 'event/:id/delete',
+          //   element: <EventDeletePage />,
+          // },
+          // {
+          //   path: 'event/:id/members',
+          //   element: <EventMembersPage />,
+          // },
+          // {
+          //   path: 'event/:id/edit',
+          //   element: <EventEditPage />,
+          // },
+          // {
+          //   path: 'event/:id/members/:member',
+          //   element: <EventMemberPage />,
+          // },
         ]
       },
     ],

@@ -8,3 +8,7 @@ export * from './Logo';
 export * from './Notification';
 export * from './Profile';
 export * from './SearchBar';
+export * from './DeleteButton';
+export * from './EditButton';
+export * from './TransparentButton';
+export * from './DefaultButton';

@@ -1,0 +1,13 @@
+.transparent-button {
+  border: 3px solid var(--color2);
+  border-radius: var(--border-radius-20px);
+  background-color: var(--color4);
+
+  font-family: Kantumruy Pro;
+  font-weight: 700;
+  font-size: var(--fonts20px);
+  line-height: 100%;
+  color: var(--color2);
+  cursor: pointer;
+  padding: 15px;
+}

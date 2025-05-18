@@ -8,12 +8,16 @@ import locationIcon from '@shared/assets/location.svg';
 import categoryIcon from '@shared/assets/category.svg';
 
 import './EventPage.scss';
-import { Button } from '@shared/ui';
+import { DefaultButton, DeleteButton, EditButton, TransparentButton } from '@shared/ui';
 
 export const EventPage = () => {
   const { 
     event,
-    redirect
+    redirect,
+    isOrganizer,
+    redirectDelete,
+    redirectEdit,
+    redirectMembers
    } = useBehavior();
 
   return (
@@ -21,12 +25,20 @@ export const EventPage = () => {
       <div className="event-page">
         <h1 className="event-page__title">{event.title}</h1>
 
+        {isOrganizer &&
+          <div className="event-page__organizers">
+            <DeleteButton className="event-page__button__organizer" onClick={redirectDelete}>Удалить</DeleteButton>
+            <EditButton className="event-page__button__organizer" onClick={redirectEdit}>Изменить</EditButton>
+            <TransparentButton className="event-page__button__organizer" onClick={redirectMembers}>Участники</TransparentButton>
+          </div>
+        }
+
         <div className="event-page__info">
           <img src={event.imageUrl || eventDefaultImage} className="event-page__img" alt="event page img"/>
           <div className="event-page__right-side">
             <div className="event-page__info-item">
               <img src={dateIcon} alt="date" />
-              <span>{event.date}</span>
+              <span>{event.date}</span> 
             </div>
             <div className="event-page__info-item">
               <img src={timeIcon} alt="time" />
@@ -54,7 +66,7 @@ export const EventPage = () => {
           <h3>{event.organization}</h3>
         </div>
       </div>
-      <Button onClick={redirect} className='event-page__button' type='button'>Подать заявку</Button>
+      <DefaultButton onClick={redirect} className='event-page__button' type='button'>{isOrganizer ? `Назад к активным заявкам` : `Подать заявку`}</DefaultButton>
     </div>
     
   );

@@ -1,0 +1,21 @@
+.default-button {
+  background: var(--color3);
+  cursor: pointer;
+  border-radius: var(--border-radius-20px);
+
+  padding: 15px 25px;
+
+  font-family: Kantumruy Pro;
+  font-weight: 700;
+  font-size: var(--fonts36px);
+  line-height: 100%;
+  color: var(--color4);
+  box-shadow: 3px 6px 4px 0px rgba(36, 58, 64, 1) inset;
+
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+
+  &:active {
+    transform: scale(0.96);
+    box-shadow: 1px 2px 2px 0px rgba(36, 58, 64, 0.8) inset;
+  }
+}

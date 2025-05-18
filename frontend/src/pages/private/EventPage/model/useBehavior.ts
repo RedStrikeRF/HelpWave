@@ -11,10 +11,11 @@ export const useBehavior = () => {
   const { id } = useParams<{ id: string }>();
   const [event, setEvent] = useState<EventInfo>(MOCKEVENT);
 
+  const isOrganizer = location.pathname.includes('/organizer');
 
   useEffect(() => {
     if (!id) return;
-
+    
     // const fetchEvent = async () => {
     //   try {
     //     // const cached = sessionStorage.getItem(`event_${id}`);
@@ -40,8 +41,24 @@ export const useBehavior = () => {
   });
   }
 
+  const redirectDelete = () => {
+    navigate(`/organizer/event/${id}/delete`);
+  }
+
+  const redirectEdit = () => {
+    navigate(`/organizer/event/${id}/edit`);
+  }
+
+  const redirectMembers = () => {
+    navigate(`/organizer/event/${id}/members`);
+  }
+
   return {
     event,
-    redirect
+    redirect,
+    isOrganizer,
+    redirectDelete,
+    redirectEdit,
+    redirectMembers
   };
 };

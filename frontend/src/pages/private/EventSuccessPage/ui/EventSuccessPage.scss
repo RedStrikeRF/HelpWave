@@ -31,13 +31,10 @@
   }
 
   &__button {
-    background: transparent;
-    font-family: Kantumruy Pro;
-    font-weight: 400;
     font-size: var(--fonts32px);
-    line-height: 100%;
     color: var(--color3);
     cursor: pointer;
+    background-color: transparent;
   }
 
   &__img {
