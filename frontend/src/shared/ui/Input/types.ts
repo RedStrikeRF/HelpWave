@@ -8,4 +8,6 @@ export interface InputProps {
   type?: string;
   value?: string;
   disabled?: boolean;
+  name?: string;
+  readOnly?: boolean;
 }

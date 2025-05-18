@@ -10,4 +10,5 @@ export interface CardProps {
   onClick?: () => void;
   className?: string;
   children?: ReactNode;
+  status?: string;
 }

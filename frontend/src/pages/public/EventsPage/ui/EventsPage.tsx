@@ -1,7 +1,13 @@
 import { useState } from "react";
 import "./EventsPage.scss";
-import { Button, Card, Input } from "@shared/ui";
+import { Button,  Input } from "@shared/ui";
+import { Card } from "@features/Card";
 import { useBehavior } from '../model';
+
+import dateIcon from '@shared/assets/date.svg';
+import timeIcon from '@shared/assets/time.svg';
+import locationIcon from '@shared/assets/location.svg';
+import categoryIcon from '@shared/assets/category.svg';
 
 export const EventsPage = () => {
     const {
@@ -22,7 +28,7 @@ export const EventsPage = () => {
                     <div className="input-content">
                         <p>Местоположение</p>
                         <div className="input-group">
-                            <span>📍</span>
+                            <img src={locationIcon} alt="Местоположение"/>
                             <Input
                                 type="text"
                                 placeholder="Местоположение"
@@ -35,7 +41,7 @@ export const EventsPage = () => {
                     <div className="input-content">
                         <p>Дата</p>
                         <div className="input-group">
-                            <span>📅</span>
+                            <img src={dateIcon} alt="Дата" />
                             <Input
                                 type="text"
                                 placeholder="Дата (например: 13 апреля)"
@@ -48,7 +54,7 @@ export const EventsPage = () => {
                     <div className="input-content">
                         <p>Категория</p>
                         <div className="input-group">
-                            <span>🏷️</span>
+                            <img src={categoryIcon} alt="Категория" />
                             <Input
                                 type="text"
                                 placeholder="Категория"
@@ -74,6 +80,7 @@ export const EventsPage = () => {
                         location={event.location}
                         category={event.category}
                         imageUrl={event.imageUrl}
+                        status={event.status}
                         className="event-card"
                     />
                 ))}

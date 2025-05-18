@@ -1,4 +1,6 @@
-import { EventForm } from "@widgets/EventForm"
+import { EventForm } from "@widgets/EventForm";
+
+import './EventCreatePage.scss';
 
 export const EventCreatePage = () => {
   return (

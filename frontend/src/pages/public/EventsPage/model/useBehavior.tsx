@@ -8,6 +8,7 @@ const events = [
         location: "ул. Ясная, 18, г. Екатеринбург",
         category: "Экология",
         imageUrl: "/images/brooms.jpg",
+        status: 'rejected',
     },
     {
         title: "Сортировка пластика",
@@ -16,6 +17,7 @@ const events = [
         location: "ул. Маневровая, 35, г. Екатеринбург",
         category: "Экология",
         imageUrl: "/images/plastic.jpg",
+        status: 'rejected',
     },
     {
         title: "Сбор макулатуры",
@@ -24,6 +26,7 @@ const events = [
         location: "ул. Монтажников, 8, г. Екатеринбург",
         category: "Экология",
         imageUrl: "/images/paper.jpg",
+        status: 'rejected',
     },
     {
         title: "Сбор батареек",
@@ -32,6 +35,7 @@ const events = [
         location: "ул. Готвальда, 21, г. Екатеринбург",
         category: "Экология",
         imageUrl: "/images/batteries.jpg",
+        status: 'rejected',
     },
 ];
 

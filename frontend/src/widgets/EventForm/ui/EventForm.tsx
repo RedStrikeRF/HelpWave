@@ -1,27 +1,40 @@
 import { useState, useRef } from 'react';
 
-import { DefaultButton } from '@shared/ui';
+import { DefaultButton, Input } from '@shared/ui';
+
+import plus from "@shared/assets/plus.svg"
+
+import './EventForm.scss';
 
 export const EventForm = () => {
   const imgInputRef = useRef<HTMLInputElement>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>('');
+
   const [formData, setFormData] = useState({
     title: '',
-    date: '',
-    time: '',
+    dateStart: '',
+    dateEnd: '',
+    timeStart: '',
+    timeEnd: '',
     address: '',
-    category: '',
+    category: [] as string[],
     description: '',
     photo: null as File | null,
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData(prev => ({ ...prev, photo: e.target.files![0] }));
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormData(prev => ({ ...prev, photo: file }));
+      setPreviewUrl(URL.createObjectURL(file));
     }
   };
 
@@ -34,26 +47,93 @@ export const EventForm = () => {
     <form onSubmit={handleSubmit} className="event-form">
       <div className="event-form__wrapper">
         <div className="event-form__top">
-          <div onClick={() => imgInputRef.current?.click()}>
-            <div>+</div>
-            <div>{formData.photo ? formData.photo.name : 'Добавить фото'}</div>
-            <input 
-              type="file" 
+          <div className="event-form__top__img" onClick={() => imgInputRef.current?.click()}>
+            {previewUrl ? (
+              <img src={previewUrl} alt="Превью" className="event-form__top__img" />
+            ) : (
+              <img src={plus} alt="Добавить изображение" className="event-form__top__img plus"/>
+            )}
+            <input
+              type="file"
               ref={imgInputRef}
-              id="photo" 
-              name="photo" 
-              accept="image/*" 
+              id="photo"
+              name="photo"
+              accept="image/*"
               style={{ display: 'none' }}
               onChange={handleFileChange}
             />
           </div>
+          <div className="event-form__top__inputs">
+            <Input
+              className="event-form__top__input full-width"
+              placeholder="Введите название"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+            />
+
+            <div className="input-row full-width">
+              <Input
+                type="date"
+                className="event-form__top__input half-width"
+                placeholder="Дата начала"
+                name="dateStart"
+                value={formData.dateStart}
+                onChange={handleChange}
+              />
+              <Input
+                type="date"
+                className="event-form__top__input half-width"
+                placeholder="Дата окончания"
+                name="dateEnd"
+                value={formData.dateEnd}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="input-row full-width">
+              <Input
+                type="time"
+                className="event-form__top__input half-width"
+                placeholder="Время начала"
+                name="timeStart"
+                value={formData.timeStart}
+                onChange={handleChange}
+              />
+              <Input
+                type="time"
+                className="event-form__top__input half-width"
+                placeholder="Время окончания"
+                name="timeEnd"
+                value={formData.timeEnd}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="input-row full-width">
+              <Input
+                className="event-form__top__input half-width"
+                placeholder="Введите адрес"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+              />
+              
+              {/* <Input
+                className="event-form__top__input half-width"
+                placeholder="Введите категорию"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+              /> */}
+            </div>
+          </div>
         </div>
-        
 
         <div className="event-form__bottom">
-          <textarea 
-            id="description" 
-            name="description" 
+          <textarea
+            id="description"
+            name="description"
             value={formData.description}
             onChange={handleChange}
             placeholder="Введите описание..."

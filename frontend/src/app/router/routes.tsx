@@ -43,6 +43,10 @@ export const routes: RouteObject[] = [
         element: <NotificationPage />,
       },
       {
+        path: '/events',
+        element: <EventsPage />,
+      },
+      {
         path: 'event/success',
         element: <VolunteerEventSuccessPage />,
       },

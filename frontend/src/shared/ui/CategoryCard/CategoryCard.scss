@@ -1,0 +1,23 @@
+.category-card {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: row;
+  gap: var(--gap20px);
+
+  background: var(--color4);
+  box-shadow: 3px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  padding: 18px;
+
+  &__img {
+    max-height: 20px;
+  }
+
+  &__text {
+    font-family: Kantumruy Pro;
+    font-weight: 400;
+    font-size: var(--fonts22px);
+    line-height: 100%;
+    color: var(--color3);
+  }
+}

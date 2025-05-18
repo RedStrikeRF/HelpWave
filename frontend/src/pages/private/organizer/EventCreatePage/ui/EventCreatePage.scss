@@ -1,0 +1,16 @@
+.event-create-page {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: var(--gap50px);
+  
+  &__title {
+    font-family: Kantumruy Pro;
+    font-weight: 700;
+    font-size: var(--fonts36px);
+    line-height: 100%;
+    color: var(--color3);
+  }
+}
