@@ -18,7 +18,7 @@ import { EventSuccessPage as VolunteerEventSuccessPage } from '@pages/private/Ev
 import { ActiveApplicationsPage as VolunteerActiveApplicationsPage } from '@pages/private/volunteer/ActiveApplicationsPage';
 
 // Страницы организатора
-
+import { EventCreatePage } from '@pages/private/organizer/EventCreatePage';
 
 export const routes: RouteObject[] = [
   {
