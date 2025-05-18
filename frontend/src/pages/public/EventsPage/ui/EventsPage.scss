@@ -113,28 +113,33 @@
         }
 
         .status-badge {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
+            padding: 14px 23px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 700;
         }
 
         .status-badge.pending {
-            background-color: #fff3cd;
-            color: #856404;
+            background-color: var(--color4);
+            color: var(--color2);
+            border: 3px solid var(--color2);
         }
 
         .status-badge.approved {
-            background-color: #d4edda;
-            color: #155724;
+            background-color: var(--color4);
+            color: var(--color3);
+            border: 3px solid var(--color3);
         }
 
         .status-badge.rejected {
-            background-color: #f8d7da;
-            color: #721c24;
+            background-color: var(--color4);
+            color: #C51515;
+            border: 3px solid #C51515;
         }
 
         .card-content {
             display: flex;
+            justify-content: space-between;
             gap: 1rem;
 
             img {
@@ -155,8 +160,16 @@
                     display: flex;
                     align-items: center;
                     gap: 0.5rem;
+                    font-size: 16px;
                     color: var(--color3);
                 }
+            }
+
+            .card-actions {
+                margin-top: 1rem;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
             }
         }
     }

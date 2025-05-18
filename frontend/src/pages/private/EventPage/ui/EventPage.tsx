@@ -1,5 +1,5 @@
 import { useBehavior } from '../model';
-import ReactMarkdown from 'react-markdown';
+// import ReactMarkdown from 'react-markdown';
 
 import eventDefaultImage from '@shared/assets/eventDefault.svg'
 import dateIcon from '@shared/assets/date.svg';
@@ -11,14 +11,14 @@ import './EventPage.scss';
 import { DefaultButton, DeleteButton, EditButton, TransparentButton } from '@shared/ui';
 
 export const EventPage = () => {
-  const { 
+  const {
     event,
     redirect,
     isOrganizer,
     redirectDelete,
     redirectEdit,
     redirectMembers
-   } = useBehavior();
+  } = useBehavior();
 
   return (
     <div className='event-page__wrapper'>
@@ -34,11 +34,11 @@ export const EventPage = () => {
         }
 
         <div className="event-page__info">
-          <img src={event.imageUrl || eventDefaultImage} className="event-page__img" alt="event page img"/>
+          <img src={event.imageUrl || eventDefaultImage} className="event-page__img" alt="event page img" />
           <div className="event-page__right-side">
             <div className="event-page__info-item">
               <img src={dateIcon} alt="date" />
-              <span>{event.date}</span> 
+              <span>{event.date}</span>
             </div>
             <div className="event-page__info-item">
               <img src={timeIcon} alt="time" />
@@ -51,15 +51,15 @@ export const EventPage = () => {
             <div className="event-page__info-item">
               <img src={categoryIcon} alt="category" />
               <span>{Array.isArray(event.category)
-                  ? event.category.join(', ')
-                  : event.category}</span>
+                ? event.category.join(', ')
+                : event.category}</span>
             </div>
           </div>
         </div>
 
         <div className="event-page__content markdown-body">
           <h2 className="event-page__subtitle">Описание</h2>
-          <ReactMarkdown>{event.description}</ReactMarkdown>
+          {/* <ReactMarkdown>{event.description}</ReactMarkdown> */}
         </div>
 
         <div className="event-page__organization">
@@ -68,6 +68,6 @@ export const EventPage = () => {
       </div>
       <DefaultButton onClick={redirect} className='event-page__button' type='button'>{isOrganizer ? `Назад к активным заявкам` : `Подать заявку`}</DefaultButton>
     </div>
-    
+
   );
 };

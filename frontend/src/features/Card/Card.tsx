@@ -21,8 +21,6 @@ export const Card = ({
   const { isActiveOrganizer, isEventOrganizer, isVolunteer } = useBehavior();
 
   const getStatusBadge = () => {
-    if (!isVolunteer) return null;
-    
     let statusClass = "status-badge";
     switch (status) {
       case "rejected":
@@ -40,8 +38,8 @@ export const Card = ({
         {status === "rejected"
           ? "Заявка отклонена"
           : status === "approved"
-          ? "Заявка одобрена"
-          : "Заявка на рассмотрении"}
+            ? "Заявка одобрена"
+            : "Заявка на рассмотрении"}
       </div>
     );
   };
@@ -50,7 +48,6 @@ export const Card = ({
     <div onClick={onClick} className={className}>
       <div className="card-header">
         <h3>{title}</h3>
-        {!isVolunteer && getStatusBadge()}
       </div>
       <div className="card-content">
         <img src={imageUrl} alt={title} />
@@ -59,18 +56,19 @@ export const Card = ({
           <div><img src={timeIcon} alt="Время" />{time}</div>
           <div><img src={locationIcon} alt="Местоположение" />{location}</div>
           <div><img src={categoryIcon} alt="Категория" />{category}</div>
+          {isActiveOrganizer && (
+            <DefaultButton className="view-applications-btn">Посмотреть заявки</DefaultButton>
+          )}
+          {isEventOrganizer && (
+            <DefaultButton className="open-event-btn">Открыть</DefaultButton>
+          )}
         </div>
-      </div>
-      <div className="card-actions">
-        {isActiveOrganizer && (
-          <DefaultButton className="view-applications-btn">Посмотреть заявки</DefaultButton>
-        )}
-        {isEventOrganizer && (
-          <DefaultButton className="open-event-btn">Открыть</DefaultButton>
-        )}
-        {!isVolunteer && (
-          <DeleteButton className="cancel-application-btn">Отменить заявку</DeleteButton>
-        )}
+        <div className="card-actions">
+          {!isVolunteer && getStatusBadge()}
+          {!isVolunteer && (
+            <DeleteButton className="cancel-application-btn">Отменить заявку</DeleteButton>
+          )}
+        </div>
       </div>
     </div>
   );
