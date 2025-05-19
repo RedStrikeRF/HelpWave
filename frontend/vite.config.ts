@@ -15,7 +15,8 @@ export default defineConfig({
       { find: '@pages', replacement: path.resolve(__dirname, 'src/pages') },
       { find: '@features', replacement: path.resolve(__dirname, 'src/features') },
       { find: '@entities', replacement: path.resolve(__dirname, 'src/entities') },
-      { find: '@shared', replacement: path.resolve(__dirname, 'src/shared') }
+      { find: '@shared', replacement: path.resolve(__dirname, 'src/shared') },
+      { find: '@api', replacement: path.resolve(__dirname, 'src/API') }
     ]
   },
   server: {

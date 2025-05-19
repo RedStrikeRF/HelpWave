@@ -19,6 +19,7 @@ import { ActiveApplicationsPage as VolunteerActiveApplicationsPage } from '@page
 
 // Страницы организатора
 import { EventCreatePage } from '@pages/private/organizer/EventCreatePage';
+import { TESTPAGE } from '@pages/public/TESTPAGE';
 
 export const routes: RouteObject[] = [
   {
@@ -37,6 +38,10 @@ export const routes: RouteObject[] = [
       {
         index: true,
         element: <HomePage />
+      },
+      {
+        path: '/TEST',
+        element: <TESTPAGE />
       },
       {
         path: '/notification',

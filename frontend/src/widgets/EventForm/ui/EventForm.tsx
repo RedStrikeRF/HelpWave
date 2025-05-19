@@ -1,10 +1,14 @@
 import { useState, useRef } from 'react';
+import { MultiSelect } from 'primereact/multiselect';
 
-import { DefaultButton, Input } from '@shared/ui';
+import { DefaultButton, Input, CategoryCard } from '@shared/ui';
+import { CATEGORIES, Category } from '@shared/const/category';
+
 
 import plus from "@shared/assets/plus.svg"
 
 import './EventForm.scss';
+import { categoryIcons } from '@shared/assets/category';
 
 export const EventForm = () => {
   const imgInputRef = useRef<HTMLInputElement>(null);
@@ -21,7 +25,6 @@ export const EventForm = () => {
     description: '',
     photo: null as File | null,
   });
-
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -43,6 +46,9 @@ export const EventForm = () => {
     console.log(formData);
   };
 
+  const getIconByName = (name: string) => {
+    return categoryIcons.find(icon => icon.name === name)?.component;
+  };
   return (
     <form onSubmit={handleSubmit} className="event-form">
       <div className="event-form__wrapper">
@@ -118,7 +124,7 @@ export const EventForm = () => {
                 value={formData.address}
                 onChange={handleChange}
               />
-              
+
               {/* <Input
                 className="event-form__top__input half-width"
                 placeholder="Введите категорию"

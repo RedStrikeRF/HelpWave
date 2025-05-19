@@ -10,7 +10,8 @@
       "@pages/*": ["pages/*"],
       "@features/*": ["features/*"],
       "@entities/*": ["entities/*"],
-      "@shared/*": ["shared/*"]
+      "@shared/*": ["shared/*"],
+      "@api/*": ["API/*"]
     },
     "jsx": "react-jsx",
     "strict": true,
