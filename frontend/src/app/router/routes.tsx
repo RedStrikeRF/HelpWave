@@ -11,7 +11,7 @@ import { NotificationPage } from '@pages/private/NotificationPage';
 import { LoginPage } from '@pages/public/LoginPage';
 import { HomePage } from '@pages/public/HomePage';
 import { RegistrationPage } from '@pages/public/RegistrationPage';
-import { EventPage} from '@pages/private/EventPage';
+import { EventPage } from '@pages/private/EventPage';
 
 // Страницы волонтерства
 import { EventSuccessPage as VolunteerEventSuccessPage } from '@pages/private/EventSuccessPage';
@@ -20,6 +20,7 @@ import { ActiveApplicationsPage as VolunteerActiveApplicationsPage } from '@page
 // Страницы организатора
 import { EventCreatePage } from '@pages/private/organizer/EventCreatePage';
 import { TESTPAGE } from '@pages/public/TESTPAGE';
+import { ApplyPage } from '@pages/private/ApplyPage/ui';
 
 export const routes: RouteObject[] = [
   {
@@ -59,20 +60,24 @@ export const routes: RouteObject[] = [
         path: 'event/:id',
         element: <EventPage />,
       },
+      {
+        path: 'apply',
+        element: <ApplyPage />
+      },
       // TODO: Прописать все страницы волонтеров ниже
       {
-      path: 'volunteer',
-      children: [
-        {
-          path: 'active-applications',
-          element: <VolunteerActiveApplicationsPage />,
-        },
-        {
-          path: 'event/:id',
-          element: <EventPage />,
-        }
+        path: 'volunteer',
+        children: [
+          {
+            path: 'active-applications',
+            element: <VolunteerActiveApplicationsPage />,
+          },
+          {
+            path: 'event/:id',
+            element: <EventPage />,
+          }
         ]
-        },
+      },
       // TODO: Прописать все страницы организаторов ниже
       {
         path: 'organizer',
