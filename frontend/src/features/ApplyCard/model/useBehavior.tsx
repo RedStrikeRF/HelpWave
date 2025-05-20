@@ -2,8 +2,6 @@ import { useState } from 'react';
 
 export const useBehavior = (status?: string, onRate?: (rating: number) => void) => {
     const isActiveOrganizer = location.pathname.includes('/active-organizer');
-    const isEventOrganizer = location.pathname.includes('/event-organizer');
-    const isVolunteer = location.pathname.includes('/volunteer');
     const isParticipant = location.pathname.includes('/participant');
 
     const [isContentCollapsed, setIsContentCollapsed] = useState(false);
@@ -24,43 +22,41 @@ export const useBehavior = (status?: string, onRate?: (rating: number) => void) 
         }
 
         return (
-            <div className= { statusClass } >
-                { status === "rejected"
-                ? "Заявка отклонена"
-                : status === "approved"
-                    ? "Заявка одобрена"
-                    : "Заявка на рассмотрении"
-    }
-    </div>
+            <div className={statusClass} >
+                {status === "rejected"
+                    ? "Заявка отклонена"
+                    : status === "approved"
+                        ? "Заявка одобрена"
+                        : "Заявка на рассмотрении"
+                }
+            </div>
         );
     };
 
-const handleRateClick = (value: number) => {
-    setRatingValue(value);
-};
+    const handleRateClick = (value: number) => {
+        setRatingValue(value);
+    };
 
-const submitRating = () => {
-    onRate?.(ratingValue);
-    setIsRatingMode(false);
-    setIsContentCollapsed(false);
-};
+    const submitRating = () => {
+        onRate?.(ratingValue);
+        setIsRatingMode(false);
+        setIsContentCollapsed(false);
+    };
 
-const handleMarkClick = () => {
-    setIsContentCollapsed(true);
-    setIsRatingMode(true);
-};
+    const handleMarkClick = () => {
+        setIsContentCollapsed(true);
+        setIsRatingMode(true);
+    };
 
-return {
-    isActiveOrganizer,
-    isEventOrganizer,
-    isVolunteer,
-    isParticipant,
-    isContentCollapsed,
-    ratingValue,
-    isRatingMode,
-    getStatusBadge,
-    handleRateClick,
-    submitRating,
-    handleMarkClick
-};
+    return {
+        isActiveOrganizer,
+        isParticipant,
+        isContentCollapsed,
+        ratingValue,
+        isRatingMode,
+        getStatusBadge,
+        handleRateClick,
+        submitRating,
+        handleMarkClick
+    };
 };
