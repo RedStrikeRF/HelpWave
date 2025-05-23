@@ -1,17 +1,16 @@
 import { RouteObject } from 'react-router-dom';
 
-import { MainLayout } from '@shared/ui/layout/MainLayout';
+import { MainLayout, AuthLayout } from '@shared/ui';
 import { PrivateRoute } from './PrivateRoute';
 
-import { ProfilePage } from '@pages/public/ProfilePage';
 import { EventsPage } from '@pages/public/EventsPage';
 
 // Общие страницы
 import { NotificationPage } from '@pages/private/NotificationPage';
-import { LoginPage } from '@pages/public/LoginPage';
+import { LoginPage } from '@pages/public/AuthPages/LoginPage';
 import { HomePage } from '@pages/public/HomePage';
-import { RegistrationPage } from '@pages/public/RegistrationPage';
 import { EventPage } from '@pages/private/EventPage';
+import { VolunteerRegPage, OrganizerRegPage } from '@pages/public/AuthPages';
 
 // Страницы волонтерства
 import { EventSuccessPage as VolunteerEventSuccessPage } from '@pages/private/EventSuccessPage';
@@ -19,95 +18,70 @@ import { ActiveApplicationsPage as VolunteerActiveApplicationsPage } from '@page
 
 // Страницы организатора
 import { EventCreatePage } from '@pages/private/organizer/EventCreatePage';
-import { TESTPAGE } from '@pages/public/TESTPAGE';
 import { ApplyPage } from '@pages/private/ApplyPage/ui';
 
 export const routes: RouteObject[] = [
   {
-    path: '/login',
-    element: <LoginPage />,
-  },
-  {
-    path: '/registration',
-    element: <RegistrationPage />,
-  },
-  {
     path: '/',
     element: <MainLayout />,
     children: [
-      // Тут общие страницы
-      {
-        index: true,
-        element: <HomePage />
-      },
-      {
-        path: '/TEST',
-        element: <TESTPAGE />
-      },
-      {
-        path: '/notification',
-        element: <NotificationPage />,
-      },
-      {
-        path: '/events',
-        element: <EventsPage />,
-      },
-      {
-        path: 'event/success',
-        element: <VolunteerEventSuccessPage />,
-      },
-      {
-        path: 'event/:id',
-        element: <EventPage />,
-      },
-      {
-        path: 'apply',
-        element: <ApplyPage />
-      },
-      // TODO: Прописать все страницы волонтеров ниже
+      { index: true, element: <HomePage /> },
+      { path: 'notification', element: <NotificationPage /> },
+      { path: 'events', element: <EventsPage /> },
+      { path: 'event/:id', element: <EventPage /> },
+      { path: 'apply', element: <ApplyPage /> },
+
+      // Страницы волонтёра
       {
         path: 'volunteer',
         children: [
-          {
-            path: 'active-applications',
-            element: <VolunteerActiveApplicationsPage />,
-          },
-          {
-            path: 'event/:id',
-            element: <EventPage />,
-          }
-        ]
+          // Страница поиска мероприятий
+          { path: 'event', element: <EventPage /> },
+          // Страница отображения Информации о событии
+          { path: 'event/:id', element: <EventPage /> },
+          // Страница об успешно созданной заявке на мероприятие
+          { path: 'event/success', element: <VolunteerEventSuccessPage /> },
+          // TODO расставить нужные страницы
+          // Основная страница профиля
+          // { path: 'profile', element: <EventCreatePage /> },
+          // Страница редактирования данных профиля
+          // { path: 'profile/edit', element: <EventCreatePage /> },
+          // Страница с активными заявками и их статусами
+          { path: 'active-applications', element: <VolunteerActiveApplicationsPage /> },
+        ],
       },
-      // TODO: Прописать все страницы организаторов ниже
+
+      // Страницы организатора
       {
         path: 'organizer',
         children: [
-          {
-            path: 'event/:id',
-            element: <EventPage />,
-          },
-          {
-            path: 'event/create',
-            element: <EventCreatePage />,
-          },
-          // {
-          //   path: 'event/:id/delete',
-          //   element: <EventDeletePage />,
-          // },
-          // {
-          //   path: 'event/:id/members',
-          //   element: <EventMembersPage />,
-          // },
-          // {
-          //   path: 'event/:id/edit',
-          //   element: <EventEditPage />,
-          // },
-          // {
-          //   path: 'event/:id/members/:member',
-          //   element: <EventMemberPage />,
-          // },
-        ]
+          
+          { path: 'event/:id', element: <EventPage /> },
+          // Страница создания мероприятия
+          { path: 'event/create', element: <EventCreatePage /> },
+          // Страница об успешно созданной мероприятии
+          { path: 'event/success', element: <VolunteerEventSuccessPage /> },
+          // TODO расставить нужные страницы
+          // Основная страница профиля
+          // { path: 'profile', element: <EventCreatePage /> },
+          // Страница редактирования данных профиля
+          // { path: 'profile/edit', element: <EventCreatePage /> },
+        ],
       },
+    ],
+  },
+
+  // Layout для авторизации/регистрации
+  // TODO
+  // 1: Проверить API на работоспособность
+  // 2: Добавить API для регистрации волонтера и организатора
+  {
+    path: '/',
+    element: <AuthLayout />,
+    children: [
+      { path: 'login', element: <LoginPage /> },
+      { path: '/volunteer/registration', element: <VolunteerRegPage /> },
+      { path: '/organizer/registration', element: <OrganizerRegPage /> },
     ],
   },
 ];

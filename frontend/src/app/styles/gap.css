@@ -1,8 +1,9 @@
 :root {
+  --gap5px: 5px;
+  --gap10px: 10px;
   --gap20px: 20px;
   --gap25px: 25px;
-  --gap35px: 35px;
   --gap30px: 30px;
-  --gap10px: 10px;
+  --gap35px: 35px;
   --gap50px: 50px;
 }

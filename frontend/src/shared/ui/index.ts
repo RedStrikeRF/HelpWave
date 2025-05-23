@@ -12,3 +12,5 @@ export * from './EditButton';
 export * from './TransparentButton';
 export * from './DefaultButton';
 export * from './CategoryCard';
+
+export * from './layout';

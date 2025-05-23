@@ -11,7 +11,7 @@
       "@features/*": ["features/*"],
       "@entities/*": ["entities/*"],
       "@shared/*": ["shared/*"],
-      "@api/*": ["API/*"]
+      "@api": ["API"]
     },
     "jsx": "react-jsx",
     "strict": true,
