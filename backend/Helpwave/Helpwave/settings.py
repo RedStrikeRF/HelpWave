@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-8^sm)zeji3u^02+@32eig-!6n3!hhr2-thmcpd_)%8wv(wqt(t
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main',
+    'Helpwave.main',
     'rest_framework',
     'rest_framework_simplejwt',
     'django_extensions'
@@ -61,7 +61,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'Helpwave.urls'
+ROOT_URLCONF = 'Helpwave.Helpwave.urls'
 
 TEMPLATES = [
     {

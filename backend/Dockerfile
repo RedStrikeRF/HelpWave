@@ -2,12 +2,13 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY . .
+ENV PYTHONPATH="${PYTHONPATH}:/app/Helpwave"
 
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Используем переменные окружения для Django
-ENV DJANGO_SETTINGS_MODULE=Helpwave.settings
+COPY . .
 
-# Главное: запускаем Gunicorn из вложенной директории
-CMD ["gunicorn", "--chdir", "Helpwave", "Helpwave.wsgi:application", "--bind", "0.0.0.0:8000"]
+ENV DJANGO_SETTINGS_MODULE=Helpwave.Helpwave.settings
+
+CMD ["gunicorn", "Helpwave.Helpwave.wsgi:application", "--bind", "0.0.0.0:8080"]

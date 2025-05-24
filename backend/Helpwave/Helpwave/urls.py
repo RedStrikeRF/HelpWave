@@ -1,8 +1,10 @@
 
 from django.contrib import admin
-from django.urls import path,include
+from django.http import HttpResponse
+from django.urls import path, include
 
 urlpatterns = [
-    path('api/',include('main.urls')),
-    path('admin/', admin.site.urls)
+    path('', lambda request: HttpResponse("Welcome to Helpwave API", content_type="text/plain")),
+    path('api/', include('Helpwave.main.urls')),
+    path('admin/', admin.site.urls),
 ]
