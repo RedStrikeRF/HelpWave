@@ -15,6 +15,7 @@ import { VolunteerRegPage, OrganizerRegPage } from '@pages/public/AuthPages';
 // Страницы волонтерства
 import { EventSuccessPage as VolunteerEventSuccessPage } from '@pages/private/EventSuccessPage';
 import { ActiveApplicationsPage as VolunteerActiveApplicationsPage } from '@pages/private/volunteer/ActiveApplicationsPage';
+import { VolunteerInfoPage } from '@pages/public/InfoPage/Volunteer';
 
 // Страницы организатора
 import { EventCreatePage } from '@pages/private/organizer/EventCreatePage';
@@ -33,8 +34,11 @@ export const routes: RouteObject[] = [
 
       // Страницы волонтёра
       {
+        
         path: 'volunteer',
         children: [
+          // Страница с информацией о возможностях волонтеров у нас на платформе
+          { path: 'info', element: <VolunteerInfoPage /> },
           // Страница поиска мероприятий
           { path: 'event', element: <EventPage /> },
           // Страница отображения Информации о событии
