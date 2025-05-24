@@ -10,103 +10,66 @@ export const VolunteerInfoPage = () => {
   const { handleBackClick, handleRegisterClick } = useBehavior();
 
   return (
-    <div className="info-page">
-      <div className="info-page__back-button">
-        <BackButton onClick={handleBackClick}>
-          Назад
-        </BackButton>
-      </div>
+    <div className="info-page full-width">
+      <BackButton className="info-page__back-button" onClick={handleBackClick}>Назад</BackButton>
 
-      <h1 className="info-page__title">Хотите стать волонтером?</h1>
+      <h1 className="info-page__title full-width">Хотите стать волонтером?</h1>
 
-      <div className="info-page__content-section info-page__content-section--image-right">
-        <div className="info-page__image-wrapper">
-          <img 
-            className="info-page__image" 
-            src={n} 
-            alt="Волонтерская деятельность" 
-          />
-        </div>
-
-        <div className="info-page__text-content">
-          <h3 className="info-page__subtitle">Вы по адресу!</h3>
-          <p>
+      <div className="info-page__content-block full-width img__rigth">
+        <img className="info-page__image" src={n} alt="Волонтерская деятельность" />
+        <div className="info-page__text-block">
+          <p className="info-page__text">Вы по адресу!</p>
+          <p className="info-page__text">
             С помощью нашего сайта вы можете легко начать свой путь в мире волонтерства:
           </p>
-          
-          <ul className="info-page__list info-page__list--steps">
+          <ul className="info-page__list">
+            <li className="info-page__list-item marker">выбирайте любое доступное событие</li>
+            <li className="info-page__list-item marker">подавайте заявку на участие</li>
+            <li className="info-page__list-item marker">дождитесь одобрения от организатора</li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="info-page__content-block full-width img__left">
+        <img className="info-page__image" src={o} alt="Возможности" />
+        <div className="info-page__text-block">
+          <p className="info-page__text">Возможности для волонтеров:</p>
+          <ul className="info-page__list">
             <li className="info-page__list-item">
-              выбирайте любое доступное событие — по интересующей вас категории или по дате;
+              <p className="info-page__text marker">Удобный поиск событий</p>
+              <p className="info-page__text">Фильтруйте события по параметрам</p>
             </li>
             <li className="info-page__list-item">
-              подавайте заявку на участие в один клик;
+              <p className="info-page__text marker">Личный кабинет</p>
+              <p className="info-page__text">Следите за статусами заявок</p>
             </li>
             <li className="info-page__list-item">
-              дождитесь одобрения от организатора — вы получите уведомление, как только ваша заявка будет принята.
+              <p className="info-page__text marker">Система рейтинга и отзывов</p>
+              <p className="info-page__text">Набирайте очки, получайте благодарности от организаторов и становитесь частью надежного сообщества.</p>
+            </li>
+            <li className="info-page__list-item">
+              <p className="info-page__text marker">Онлайн-подтверждение участия</p>
+              <p className="info-page__text">Забудьте о бумажках — подтверждение участия и теперь в один клик.</p>
             </li>
           </ul>
         </div>
       </div>
 
-      <h3 className="info-page__subheader">Возможности для волонтеров:</h3>
-
-      <div className="info-page__content-section info-page__content-section--image-left">
-        <div className="info-page__image-wrapper">
-          <img 
-            className="info-page__image" 
-            src={o} 
-            alt="Возможности для волонтеров" 
-          />
-        </div>
-
-        <div className="info-page__text-content">
-          <ul className="info-page__list info-page__list--features">
-            <li className="info-page__list-item info-page__list-item--feature">
-              <h3 className="info-page__feature-title">Удобный поиск событий</h3>
-              <p className="info-page__feature-description">
-                Фильтруйте события по дате, категории или месту проведения.
-              </p>
-            </li>
-            
-            <li className="info-page__list-item info-page__list-item--feature">
-              <h3 className="info-page__feature-title">Личный кабинет волонтера</h3>
-              <p className="info-page__feature-description">
-                Следите за статусами заявок, получайте сертификаты и баллы за участие.
-              </p>
-            </li>
-            
-            <li className="info-page__list-item info-page__list-item--feature">
-              <h3 className="info-page__feature-title">Система рейтинга и отзывов</h3>
-              <p className="info-page__feature-description">
-                Набирайте очки, получайте благодарности от организаторов и становитесь частью надежного сообщества.
-              </p>
-            </li>
-            
-            <li className="info-page__list-item info-page__list-item--feature">
-              <h3 className="info-page__feature-title">Онлайн-подтверждение участия</h3>
-              <p className="info-page__feature-description">
-                Забудьте о бумажках — подтверждение участия теперь в один клик.
-              </p>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div className="info-page__footer">
-        <p className="info-page__footer-text">
-          Спасибо, что выбираете нас!<br />
+      <div className="info-page__footer full-width">
+        <p className="info-page__text info-page__text--left">
+          Спасибо, что выбираете нас! Мы рады быть частью вашего пути.
+        </p>
+        <p className="info-page__text info-page__text--left">
           Мы рады быть частью вашего волонтерского пути. Каждое ваше участие — это вклад в доброе дело, в развитие общества и в себя. Желаем Вам вдохновения, ярких эмоций и новых полезных знакомств! Вместе — сильнее. Добро начинается с тебя!
         </p>
       </div>
 
-      <div className="info-page__action">
-        <DefaultButton
+      <DefaultButton
           onClick={handleRegisterClick}
-          className="info-page__button info-page__button--register"
+          className="info-page__button"
         >
           Зарегистрироваться
         </DefaultButton>
-      </div>
     </div>
   );
 };

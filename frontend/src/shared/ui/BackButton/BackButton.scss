@@ -1,0 +1,42 @@
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  
+  background: var(--color4);
+  cursor: pointer;
+  border-radius: var(--border-radius-20px);
+  border: 2px solid var(--color3);
+  
+  padding: 15px 25px;
+  
+  font-family: Kantumruy Pro;
+  font-weight: 700;
+  font-size: var(--fonts36px);
+  line-height: 100%;
+  color: var(--color3);
+  
+  box-shadow: none;
+  transition: all 0.2s ease;
+
+  &__icon {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    background: var(--color4);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+    .back-button__icon {
+      transform: translateX(-3px);
+    }
+  }
+
+  &:active {
+    transform: scale(0.96);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+}

@@ -18,6 +18,7 @@ import { ActiveApplicationsPage as VolunteerActiveApplicationsPage } from '@page
 import { VolunteerInfoPage } from '@pages/public/InfoPage/Volunteer';
 
 // Страницы организатора
+import { OrganizerInfoPage } from '@pages/public/InfoPage/Organizer';
 import { EventCreatePage } from '@pages/private/organizer/EventCreatePage';
 import { ApplyPage } from '@pages/private/ApplyPage/ui';
 
@@ -29,7 +30,6 @@ export const routes: RouteObject[] = [
       { index: true, element: <HomePage /> },
       { path: 'notification', element: <NotificationPage /> },
       { path: 'events', element: <EventsPage /> },
-      { path: 'event/:id', element: <EventPage /> },
       { path: 'apply', element: <ApplyPage /> },
 
       // Страницы волонтёра
@@ -39,8 +39,6 @@ export const routes: RouteObject[] = [
         children: [
           // Страница с информацией о возможностях волонтеров у нас на платформе
           { path: 'info', element: <VolunteerInfoPage /> },
-          // Страница поиска мероприятий
-          { path: 'event', element: <EventPage /> },
           // Страница отображения Информации о событии
           { path: 'event/:id', element: <EventPage /> },
           // Страница об успешно созданной заявке на мероприятие
@@ -59,7 +57,10 @@ export const routes: RouteObject[] = [
       {
         path: 'organizer',
         children: [
-          
+          // Страница с информацией о возможностях организаторов у нас на платформе
+          { path: 'info', element: <OrganizerInfoPage /> },
+
+          // Страница отображения Информации о событии
           { path: 'event/:id', element: <EventPage /> },
           // Страница создания мероприятия
           { path: 'event/create', element: <EventCreatePage /> },
