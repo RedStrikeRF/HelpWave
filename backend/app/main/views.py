@@ -1,5 +1,7 @@
 from datetime import timezone
 
+from django.http import JsonResponse
+from django.db import connection
 from django.http import HttpResponse, FileResponse
 from django.shortcuts import render, get_object_or_404
 from rest_framework import serializers, viewsets, permissions, generics, status
@@ -16,6 +18,14 @@ from .serializers import UserSerializer, VolunteerSerializer, OrganizerSerialize
 
 User = get_user_model()
 
+def db_check_view(request):
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1;")
+            row = cursor.fetchone()
+        return JsonResponse({"status": "ok", "db": row})
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)
 
 # Create your views here.
 # ViewSets

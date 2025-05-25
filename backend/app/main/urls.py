@@ -13,6 +13,7 @@ from .views import (
     MeetingViewSet,
     ObtainTokenPairWithVolunteerOrOrganizerView,
     VolunteerApplicationViewSet, ReviewViewSet, PDFDocumentViewSet,
+    db_check_view
 )
 
 router = DefaultRouter()
@@ -34,6 +35,7 @@ urlpatterns = [
     # Маршрут для верификации токена (JWT)
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 
+    path("db-check/", db_check_view),
 
 
     path('', include(router.urls)),
