@@ -20,7 +20,10 @@ import { VolunteerInfoPage } from '@pages/public/InfoPage/Volunteer';
 // Страницы организатора
 import { OrganizerInfoPage } from '@pages/public/InfoPage/Organizer';
 import { EventCreatePage } from '@pages/private/organizer/EventCreatePage';
+<<<<<<< Updated upstream
 import { ApplyPage } from '@pages/private/ApplyPage/ui';
+=======
+>>>>>>> Stashed changes
 
 export const routes: RouteObject[] = [
   {
@@ -52,8 +55,42 @@ export const routes: RouteObject[] = [
           { path: 'active-applications', element: <VolunteerActiveApplicationsPage /> },
         ],
       },
+<<<<<<< Updated upstream
 
       // Страницы организатора
+=======
+      {
+        path: '/notification',
+        element: <NotificationPage />,
+      },
+      {
+        path: '/events',
+        element: <EventsPage />,
+      },
+      {
+        path: 'event/success',
+        element: <VolunteerEventSuccessPage />,
+      },
+      {
+        path: 'event/:id',
+        element: <EventPage />,
+      },
+      // TODO: Прописать все страницы волонтеров ниже
+      {
+      path: 'volunteer',
+      children: [
+        {
+          path: 'active-applications',
+          element: <VolunteerActiveApplicationsPage />,
+        },
+        {
+          path: 'event/:id',
+          element: <EventPage />,
+        }
+        ]
+        },
+      // TODO: Прописать все страницы организаторов ниже
+>>>>>>> Stashed changes
       {
         path: 'organizer',
         children: [
