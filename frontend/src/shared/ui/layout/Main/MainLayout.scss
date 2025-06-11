@@ -1,0 +1,18 @@
+.main__content {
+  width: 100%;
+  max-width: 1700px;
+
+  margin: 40px auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+}
+
+.page-layout {
+  overflow-x: hidden;
+
+  width: 100%;
+}

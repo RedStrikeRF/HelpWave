@@ -1,0 +1,11 @@
+@import "../../AuthPage.scss";
+
+.login__image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: min-content;
+  width: min-content;
+  margin-top: 10px;
+  user-select: none;
+}

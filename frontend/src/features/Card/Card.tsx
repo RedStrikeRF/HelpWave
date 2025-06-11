@@ -64,8 +64,8 @@ export const Card = ({
           )}
         </div>
         <div className="card-actions">
-          {!isVolunteer && getStatusBadge()}
-          {!isVolunteer && (
+          {isVolunteer && getStatusBadge()}
+          {isVolunteer && (
             <DeleteButton className="cancel-application-btn">Отменить заявку</DeleteButton>
           )}
         </div>

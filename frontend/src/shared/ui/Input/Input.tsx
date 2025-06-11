@@ -20,6 +20,7 @@ export const Input = ({
       value={value}
       disabled={disabled}
       readOnly={readOnly}
+      autoComplete="off"
     />
   );
 };

@@ -1,234 +1,93 @@
 .home-page {
-    font-family: 'Gentium Plus', 'Arial', sans-serif;
-    color: #333;
-    line-height: 1.6;
-    max-width: 1920px;
-    margin: 0 auto;
-    padding: 44px 26px 78px 85px;
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  position: relative;
+
+  &__image {
+    user-select: none;
+  }
+
+  &__text {
+    max-width: 904px;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: var(--gap20px);
+  }
+
+  &__title {
+    font-family: Kantumruy Pro;
+    font-weight: 700;
+    font-size: var(--fonts36px);
+    line-height: 100%;
+    color: var(--color3);
+    text-align: left;
+
+    margin-left: 10px;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: var(--gap10px);
+
+    padding: 40px;
+
+    border-radius: var(--border-radius-50px);
+
+    background: var(--color1);
+
+    box-shadow: 8px 10px 0px 0px var(--color3);
+  }
+
+  &__paragraph {
+    font-family: Gentium Plus;
+    font-weight: 400;
+    font-size: var(--fonts32px);
+    line-height: 42px;
+    text-align: justify;
+    color: var(--black);
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gap10px);
+
+    margin-top: 60px;
+
+    width: 100%;
+  }
   
-    h1, h2, h3, h4 {
-      color: var(--color3);
-      margin-bottom: 20px;
-      font-family: 'Kantumruy Pro', 'Arial', sans-serif;
+  &__button {
+    flex: 1 1 50%;
+
+    font-family: Kantumruy Pro;
+    font-weight: 700;
+    font-size: var(--fonts48px);
+    line-height: 100%;
+    color: var(--color4);
+
+    padding: 21px 0;
+
+    &__volunteer {
+      background: var(--color2);
+      box-shadow: 3px 7px 4px 0px rgba(102, 139, 164, 1) inset;
     }
-  
-    p {
-      margin-bottom: 15px;
-    }
-  
-    ul {
-      margin-bottom: 20px;
-      padding-left: 20px;
-    }
-  
-    li {
-      margin-bottom: 10px;
-    }
-  
-    .hero-section {
-      display: flex;
-      align-items: center;
-      text-align: center;
-      padding: 40px 20px;
-      border-radius: 8px;
-      margin-bottom: 40px;
-      gap: 14px;
-      animation: fadeIn 0.5s ease;
 
-      &__image {
-        width: 50%;
-      }
-
-      &__text {
-        text-align: left;
-
-        h2 {
-            font-size: 36px;
-        }
-
-        .content {
-          max-width: 900px;
-          margin: 0 auto 90px;
-          font-size: 25px;
-          text-align: left;
-          padding: 38px;
-          background-color: #C8D2D7;
-          border-radius: 40px;
-          box-shadow: 8px 10px 0px 0px #385A64;
-        }
-      }
-
-      .buttons {
-        
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-  
-        button {
-          
-          flex: 1;
-          padding: 22px 25px;
-          border: none;
-          border-radius: 30px;
-          font-size: 40px;
-          font-weight: 700;
-          font-family: 'Kantumruy Pro', 'Arial', sans-serif;
-          cursor: pointer;
-          transition: all 0.3s ease;
-  
-          &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          }
-
-          .btn-hero-text {
-            color: #FFFFFF;
-            text-shadow: 2px 3px 2px #243A40;
-          }
-        }
-  
-        .btn-volunteer {
-          background-color: #86B3D1;
-          color: white;
-          box-shadow: inset 3px 7px 4px 0px #668BA4;
-        }
-  
-        .btn-organizer {
-          background-color: var(--color3);
-          color: white;
-          box-shadow: inset 3px 7px 4px 0 #243A40;
-        }
-      }
-    }
-  
-    .info-section {
-      border-radius: 8px;
-      position: relative;
-      animation: fadeIn 0.5s ease;
-  
-      .back-button {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        background: none;
-        border: none;
-        color: #385A64;
-        font-size: 25px;
-        cursor: pointer;
-        padding: 5px 10px;
-        border-radius: 4px;
-        transition: all 0.3s ease;
-  
-        &:hover {
-          background-color: #f0f0f0;
-        }
-      }
-  
-      h2 {
-        text-align: center;
-        margin-top: 20px;
-      }
-  
-      .subtitle {
-        font-size: 25px;
-      }
-  
-      .description {
-        font-size: 25px;
-      }
-  
-      .steps {
-        list-style: disc;
-        margin-bottom: 40px;
-        font-size: 25px;
-
-        li {
-            margin: 0;
-            margin-left: 30px;
-        }
-      }
-  
-      h3 {
-        font-size: 25px;
-        text-align: center;
-        margin: 40px 0 30px;
-      }
-
-      .info-descr-section {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 25px;
-      }
-
-      .info-descr-text {
-        p {
-            margin: 0;
-            margin-left: 30px;
-            font-size: 25px;
-        }
-      }
-  
-      .features {
-        margin-bottom: 40px;
-  
-        .feature {
-          margin: 0;
-          margin-left: 30px;
-          border-radius: 6px;
-  
-          p {
-            font-size: 25px;
-            margin: 0;
-          }
-        }
-
-        p {
-            margin: 0;
-            font-size: 25px;
-        }
-      }
-  
-      .closing {
-        margin-bottom: 30px;
-        padding: 20px;
-        border-radius: 6px;
-
-        p {
-            font-size: 25px;
-        }
-      }
-  
-      .register-btn {
-        display: block;
-        margin: 0 auto;
-        padding: 17px 38px;
-        background-color: var(--color3);
-        box-shadow: 3px 6px 4px 0 #243A40;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        font-size: 25px;
-        text-shadow: 2px 2px 2px 0 #243A40;
-        cursor: pointer;
-        transition: all 0.3s ease;
-  
-        &:hover {
-          background-color: #c0392b;
-          transform: translateY(-2px);
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-      }
-    }
-    
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    &__organizer {
+      box-shadow: 3px 7px 4px 0px rgba(36, 58, 64, 1) inset;
     }
   }
+}
