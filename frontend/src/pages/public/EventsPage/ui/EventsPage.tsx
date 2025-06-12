@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./EventsPage.scss";
-import { Button,  Input } from "@shared/ui";
+import { Button, Input } from "@shared/ui";
 import { Card } from "@features/Card";
 import { useBehavior } from '../model';
 
@@ -16,6 +16,7 @@ export const EventsPage = () => {
         handleSearch,
         handleInputChange,
         filteredEvents,
+        redirectToEvent,
         setFilteredEvents
     } = useBehavior();
 
@@ -28,7 +29,7 @@ export const EventsPage = () => {
                     <div className="input-content">
                         <p>Местоположение</p>
                         <div className="input-group">
-                            <img src={locationIcon} alt="Местоположение"/>
+                            <img src={locationIcon} alt="Местоположение" />
                             <Input
                                 type="text"
                                 placeholder="Местоположение"
@@ -71,18 +72,23 @@ export const EventsPage = () => {
             </div>
 
             <div className="events-grid">
-                {filteredEvents.map((event, index) => (
-                    <Card
-                        key={index}
-                        title={event.title}
-                        dateRange={event.dateRange}
-                        time={event.time}
-                        location={event.location}
-                        category={event.category}
-                        imageUrl={event.imageUrl}
-                        status={event.status}
-                        className="event-card"
-                    />
+                {filteredEvents.map((event) => (
+                    <div
+                        key={event.id}
+                        onClick={() => redirectToEvent(event.id)}
+                        className="event-card-wrapper"
+                    >
+                        <Card
+                            title={event.title}
+                            dateRange={event.dateRange}
+                            time={event.time}
+                            location={event.location}
+                            category={event.category}
+                            imageUrl={event.imageUrl}
+                            status={event.status}
+                            className="event-card"
+                        />
+                    </div>
                 ))}
                 {filteredEvents.length === 0 && (
                     <p style={{ textAlign: "center", gridColumn: "1 / -1", color: "#385A64" }}>

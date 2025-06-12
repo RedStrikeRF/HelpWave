@@ -1,21 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ClickableBlock, DefaultButton, Input, GrayBackground, EditButton } from '@shared/ui';
 import './VolunteerProfileEditPage.scss';
+import { useCurrentVolunteer } from '@shared/const/mock/volunteerProfile';
 
 export const VolunteerProfileEditPage = () => {
   const navigate = useNavigate();
+  const currentVolunteer = useCurrentVolunteer();
   const [formData, setFormData] = useState({
-    lastName: 'Иванов',
-    firstName: 'Иван',
-    middleName: 'Иванович',
-    birthDate: '01.01.1990',
-    email: 'ivanov@example.com',
+    lastName: '',
+    firstName: '',
+    middleName: '',
+    birthDate: '',
+    email: '',
     password: '',
-    phone: '+7 (123) 456-78-90',
+    phone: '',
     skills: '',
     interests: ''
   });
+
+  useEffect(() => {
+    if (currentVolunteer) {
+      setFormData({
+        lastName: currentVolunteer.lastName,
+        firstName: currentVolunteer.firstName,
+        middleName: currentVolunteer.middleName,
+        birthDate: currentVolunteer.birthDate,
+        email: currentVolunteer.email,
+        password: '',
+        phone: currentVolunteer.phone,
+        skills: currentVolunteer.skills,
+        interests: currentVolunteer.interests
+      });
+    }
+  }, [currentVolunteer]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>
@@ -35,7 +53,7 @@ export const VolunteerProfileEditPage = () => {
       <div className="profile-edit-form__container">
         <div className="profile-edit-form__left">
           <h1 className="profile-edit-form__title">Редактирование профиля</h1>
-          
+
           <div className="profile-edit-form__content-container">
             <GrayBackground className="profile-edit-form__section">
               <h2 className="profile-edit-form__section-title">Основная информация</h2>
@@ -114,17 +132,17 @@ export const VolunteerProfileEditPage = () => {
               />
             </GrayBackground>
           </div>
-          
+
 
           <div className="profile-edit-form__actions">
-            <EditButton 
-              type="button" 
+            <EditButton
+              type="button"
               onClick={() => navigate('/volunteer/profile')}
               className="profile-edit-form__cancel-button"
             >
               Отмена
             </EditButton>
-            <DefaultButton 
+            <DefaultButton
               type="submit"
               className="profile-edit-form__save-button"
             >

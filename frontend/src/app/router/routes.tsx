@@ -46,6 +46,10 @@ export const routes: RouteObject[] = [
           // Страница редактирования информации профиля волонтера
           // TODO
           { path: 'profile/edit', element: <VolunteerProfileEditPage /> },
+
+          { path: 'events', element: <EventsPage /> },
+
+          { path: '/events/:id', element: <EventPage /> },
         ],
       },
       {
@@ -57,7 +61,7 @@ export const routes: RouteObject[] = [
           // Страница об успешно созданной мероприятии
           { path: 'events/success', element: <EventSuccessPage /> },
 
-          
+
         ],
       },
     ],

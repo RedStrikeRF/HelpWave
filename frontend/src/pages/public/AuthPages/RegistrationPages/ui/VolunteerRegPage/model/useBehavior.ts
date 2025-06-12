@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { data, useNavigate } from "react-router-dom";
 import { access } from "fs";
+import { USERS } from "@shared/const/mock/register";
 
 export const useBehavior = () => {
   const [lastName, setLastName] = useState("");
@@ -21,38 +22,47 @@ export const useBehavior = () => {
       return;
     }
 
-    try {
-      // const { data } = await AuthAPI.registerVolunteer({
-      //   last_name: lastName,
-      //   first_name: firstName,
-      //   middle_name: middleName,
-      //   birth_date: birthDate,
-      //   email,
-      //   password,
-      // });
+    // Проверка на существующего пользователя по email
+    const existingUser = USERS.find(user => user.email === email);
+    if (existingUser) {
+      setError("Пользователь с таким email уже существует");
+      return;
+    }
 
+    // Проверка сложности пароля (простая проверка)
+    if (password.length < 6) {
+      setError("Пароль должен содержать не менее 6 символов");
+      return;
+    }
+
+    try {
+      // Имитация успешной регистрации
       const data = {
-        access: "доступ",
-        refresh: "Обновление токена"
-      }
+        access: "access_token_" + Math.random().toString(36).substring(2),
+        refresh: "refresh_token_" + Math.random().toString(36).substring(2)
+      };
+
       // Сохраняем токены после успешной регистрации
       localStorage.setItem("accessToken", data.access);
       localStorage.setItem("refreshToken", data.refresh);
+
+      // Добавляем нового пользователя в моки (для демонстрации)
+      const newUser = {
+        lastName,
+        firstName,
+        middleName,
+        birthDate,
+        email,
+        password
+      };
+      USERS.push(newUser);
 
       // Перенаправляем на страницу волонтера
       navigate("/volunteer/profile");
 
     } catch (err) {
       console.error("Registration error:", err);
-      
-      // Обработка различных ошибок
-      // if (err.response?.data?.email) {
-      //   setError("Пользователь с таким email уже существует");
-      // } else if (err.response?.data?.password) {
-      //   setError("Пароль слишком простой");
-      // } else {
-      //   setError("Произошла ошибка при регистрации");
-      // }
+      setError("Произошла ошибка при регистрации");
     }
   };
 
