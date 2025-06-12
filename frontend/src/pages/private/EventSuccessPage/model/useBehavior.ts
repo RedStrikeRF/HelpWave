@@ -1,18 +1,18 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export const useBehavior = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from;
-  const isOrganizer: boolean = from?.includes('/organizer');
+  const pathname = location.pathname;
+  const isOrganizer: boolean = pathname.includes('/organizer/');
 
   const handleGoToApplications = () => {
-    navigate(isOrganizer ? '/organizer/active-applications' : '/volunteer/active-applications');
+    navigate(isOrganizer ? '/organizer/active-application' : '/volunteer/active-application');
   };
 
   const handleGoToSearch = () => {
-    navigate(isOrganizer ? '/organizer/searchEvent' : '/volunteer/searchEvent');
+    navigate(isOrganizer ? '/organizer/events' : '/volunteer/events/search');
   };
 
   return {

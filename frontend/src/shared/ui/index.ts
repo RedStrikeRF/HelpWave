@@ -13,5 +13,6 @@ export * from './TransparentButton';
 export * from './DefaultButton';
 export * from './BackButton';
 export * from './CategoryCard';
-
+export * from './ClickableBlock';
+export * from './GrayBackground'
 export * from './layout';

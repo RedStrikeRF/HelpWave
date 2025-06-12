@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthAPI } from "@api";
 
 export const useBehavior = () => {
   const [username, setUsername] = useState("");
@@ -12,29 +11,29 @@ export const useBehavior = () => {
     e.preventDefault();
     setError("");
 
-    try {
-      const { data } = await AuthAPI.login({
-        username,
-        password,
-      });
+    // try {
+    //   const { data } = await AuthAPI.login({
+    //     username,
+    //     password,
+    //   });
 
-      // Сохраняем токены в localStorage
-      localStorage.setItem("accessToken", data.access);
-      localStorage.setItem("refreshToken", data.refresh);
+    //   // Сохраняем токены в localStorage
+    //   localStorage.setItem("accessToken", data.access);
+    //   localStorage.setItem("refreshToken", data.refresh);
 
       
-      if (data.volunteer_profile) {
-        navigate("/volunteer/dashboard");
-      } else if (data.organizer_profile) {
-        navigate("/organizer/dashboard");
-      } else {
-        navigate("/");
-      }
+    //   if (data.volunteer_profile) {
+    //     navigate("/volunteer/dashboard");
+    //   } else if (data.organizer_profile) {
+    //     navigate("/organizer/dashboard");
+    //   } else {
+    //     navigate("/");
+    //   }
 
-    } catch (err) {
-      setError("Неверный логин или пароль");
-      console.error("Login error:", err);
-    }
+    // } catch (err) {
+    //   setError("Неверный логин или пароль");
+    //   console.error("Login error:", err);
+    // }
   };
 
   return {

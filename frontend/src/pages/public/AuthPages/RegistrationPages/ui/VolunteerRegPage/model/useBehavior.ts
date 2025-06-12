@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { data, useNavigate } from "react-router-dom";
-import { AuthAPI } from "@api";
 import { access } from "fs";
 
 export const useBehavior = () => {

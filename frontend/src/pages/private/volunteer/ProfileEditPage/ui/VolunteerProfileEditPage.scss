@@ -1,0 +1,103 @@
+.profile-edit-form {
+  margin: 0 auto;
+  padding: 20px;
+  width: 100%;
+  max-width: 1280px;
+
+  &__content-container {
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-start;
+    flex-direction: row;
+    gap: 50px;
+    flex: 1 50%;
+  }
+
+  &__container {
+    display: flex;
+    gap: 30px;
+  }
+
+  &__left {
+    flex: 1;
+    min-width: 50%; // Гарантируем минимум 50% ширины
+  }
+
+  &__title {
+    font-size: 24px;
+    margin-bottom: 25px;
+    color: #333;
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 20px;
+    width: 100%; // Занимает всю доступную ширину
+
+    &-title {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: #444;
+    }
+  }
+
+  &__input {
+    width: 100%;
+    padding: 20px 30px;
+    border: 2px solid var(--color3);
+    border-radius: var(--border-radius-20px);
+    background-color: var(--color4);
+
+    &:focus {
+      outline: none;
+      border-color: #1a73e8;
+      box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+    }
+  }
+
+  &__textarea {
+    width: 100%;
+    min-height: 300px; // Минимальная высота 400px
+    height: 50%; // Занимает 50% высоты родителя
+    padding: 20px 30px;
+    border: 2px solid var(--color3);
+    border-radius: var(--border-radius-20px);
+    background-color: var(--color4);
+    resize: vertical; // Позволяет изменять размер только по вертикали
+    font-family: inherit;
+    font-size: inherit;
+    line-height: 1.5;
+
+    &:focus {
+      outline: none;
+      border-color: #1a73e8;
+      box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 20px;
+  }
+
+  &__cancel-button {
+    background: var(--color3);
+    cursor: pointer;
+    border-radius: var(--border-radius-20px);
+    padding: 15px 25px;
+    font-family: Kantumruy Pro;
+    font-weight: 700;
+    font-size: var(--fonts36px);
+    line-height: 100%;
+    color: var(--color4);
+    box-shadow: 3px 6px 4px 0px rgb(36, 58, 64) inset;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+}

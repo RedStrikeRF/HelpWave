@@ -13,17 +13,15 @@ import { EventPage } from '@pages/private/EventPage';
 import { VolunteerRegPage, OrganizerRegPage } from '@pages/public/AuthPages';
 
 // Страницы волонтерства
-import { EventSuccessPage as VolunteerEventSuccessPage } from '@pages/private/EventSuccessPage';
+import { EventSuccessPage } from '@pages/private/EventSuccessPage';
 import { ActiveApplicationsPage as VolunteerActiveApplicationsPage } from '@pages/private/volunteer/ActiveApplicationsPage';
 import { VolunteerInfoPage } from '@pages/public/InfoPage/Volunteer';
 
 // Страницы организатора
 import { OrganizerInfoPage } from '@pages/public/InfoPage/Organizer';
 import { EventCreatePage } from '@pages/private/organizer/EventCreatePage';
-<<<<<<< Updated upstream
-import { ApplyPage } from '@pages/private/ApplyPage/ui';
-=======
->>>>>>> Stashed changes
+import { VolunteerProfilePage } from '@pages/private/volunteer/ProfilePage';
+import { VolunteerProfileEditPage } from '@pages/private/volunteer/ProfileEditPage';
 
 export const routes: RouteObject[] = [
   {
@@ -32,98 +30,45 @@ export const routes: RouteObject[] = [
     children: [
       { index: true, element: <HomePage /> },
       { path: 'notification', element: <NotificationPage /> },
-      { path: 'events', element: <EventsPage /> },
-      { path: 'apply', element: <ApplyPage /> },
-
-      // Страницы волонтёра
       {
-        
         path: 'volunteer',
         children: [
           // Страница с информацией о возможностях волонтеров у нас на платформе
           { path: 'info', element: <VolunteerInfoPage /> },
-          // Страница отображения Информации о событии
-          { path: 'event/:id', element: <EventPage /> },
+
           // Страница об успешно созданной заявке на мероприятие
-          { path: 'event/success', element: <VolunteerEventSuccessPage /> },
-          // TODO расставить нужные страницы
-          // Основная страница профиля
-          // { path: 'profile', element: <EventCreatePage /> },
-          // Страница редактирования данных профиля
-          // { path: 'profile/edit', element: <EventCreatePage /> },
-          // Страница с активными заявками и их статусами
-          { path: 'active-applications', element: <VolunteerActiveApplicationsPage /> },
+          { path: 'events/success', element: <EventSuccessPage /> },
+
+          // Страница профиля волонтера
+          // TODO
+          { path: 'profile', element: <VolunteerProfilePage /> },
+
+          // Страница редактирования информации профиля волонтера
+          // TODO
+          { path: 'profile/edit', element: <VolunteerProfileEditPage /> },
         ],
       },
-<<<<<<< Updated upstream
-
-      // Страницы организатора
-=======
-      {
-        path: '/notification',
-        element: <NotificationPage />,
-      },
-      {
-        path: '/events',
-        element: <EventsPage />,
-      },
-      {
-        path: 'event/success',
-        element: <VolunteerEventSuccessPage />,
-      },
-      {
-        path: 'event/:id',
-        element: <EventPage />,
-      },
-      // TODO: Прописать все страницы волонтеров ниже
-      {
-      path: 'volunteer',
-      children: [
-        {
-          path: 'active-applications',
-          element: <VolunteerActiveApplicationsPage />,
-        },
-        {
-          path: 'event/:id',
-          element: <EventPage />,
-        }
-        ]
-        },
-      // TODO: Прописать все страницы организаторов ниже
->>>>>>> Stashed changes
       {
         path: 'organizer',
         children: [
           // Страница с информацией о возможностях организаторов у нас на платформе
           { path: 'info', element: <OrganizerInfoPage /> },
 
-          // Страница отображения Информации о событии
-          { path: 'event/:id', element: <EventPage /> },
-          // Страница создания мероприятия
-          { path: 'event/create', element: <EventCreatePage /> },
           // Страница об успешно созданной мероприятии
-          { path: 'event/success', element: <VolunteerEventSuccessPage /> },
-          // TODO расставить нужные страницы
-          // Основная страница профиля
-          // { path: 'profile', element: <EventCreatePage /> },
-          // Страница редактирования данных профиля
-          // { path: 'profile/edit', element: <EventCreatePage /> },
+          { path: 'events/success', element: <EventSuccessPage /> },
+
+          
         ],
       },
     ],
   },
-
-  // Layout для авторизации/регистрации
-  // TODO
-  // 1: Проверить API на работоспособность
-  // 2: Добавить API для регистрации волонтера и организатора
   {
     path: '/',
     element: <AuthLayout />,
     children: [
       { path: 'login', element: <LoginPage /> },
-      { path: '/volunteer/registration', element: <VolunteerRegPage /> },
-      { path: '/organizer/registration', element: <OrganizerRegPage /> },
+      { path: 'volunteer/registration', element: <VolunteerRegPage /> },
+      { path: 'organizer/registration', element: <OrganizerRegPage /> },
     ],
   },
 ];

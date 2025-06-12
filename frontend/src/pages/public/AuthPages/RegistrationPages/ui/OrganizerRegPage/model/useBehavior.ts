@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthAPI } from "@api";
 
 export const useBehavior = () => {
   const [orgName, setOrgName] = useState("");

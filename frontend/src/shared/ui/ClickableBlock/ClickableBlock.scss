@@ -1,0 +1,51 @@
+.clickable-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 15px;
+
+  &__title {
+  font-family: Kantumruy Pro;
+  font-weight: 700;
+  font-size: var(--fonts32px);
+  line-height: 100%;
+  color: var(--color3);
+  }
+
+  &__container {
+    padding: 25px 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 30px;
+  }
+
+  &__edit-button {
+    font-family: Kantumruy Pro;
+    font-weight: 700;
+    font-size: var(--fonts20px);
+    line-height: 100%;
+    color: var(--color3);
+    align-self: flex-end;
+    background: transparent;
+    cursor: pointer;
+    border: none;
+    outline: none;
+
+    & img {
+      max-width: 14px;
+      margin-left: 6px;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 15px;
+    min-width: 400px;
+  }
+}
