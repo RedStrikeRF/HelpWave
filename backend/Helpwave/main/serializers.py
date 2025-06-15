@@ -1,6 +1,6 @@
 from rest_framework import serializers, viewsets, permissions
 from django.contrib.auth import get_user_model
-from .models import Volunteer, Organizer, Meeting, VolunteerApplication, Review, PDFDocument
+from .models import Volunteer, Organizer, Meeting, VolunteerApplication, Review, PDFDocument, Notification
 
 User = get_user_model()
 
@@ -44,6 +44,21 @@ class VolunteerSerializer(serializers.ModelSerializer):
             volunteer = Volunteer.objects.create(user=user, **validated_data)
             return volunteer
         raise serializers.ValidationError(user_serializer.errors)
+
+    def update(self, instance, validated_data):
+        # Обрабатываем вложенные данные пользователя
+        user_data = validated_data.pop('user', None)
+        if user_data:
+            user_serializer = UserSerializer(
+                instance.user,
+                data=user_data,
+                partial=self.partial
+            )
+            user_serializer.is_valid(raise_exception=True)
+            user_serializer.save()
+
+        # Обновляем данные волонтера
+        return super().update(instance, validated_data)
 
 
 class OrganizerSerializer(serializers.ModelSerializer):
@@ -95,7 +110,21 @@ class OrganizerSerializer(serializers.ModelSerializer):
         return instance
 
 
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ['id', 'text', 'created_at']
+        read_only_fields = fields
+
+
+class SimpleUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'first_name', 'last_name')
+
+
 class MeetingSerializer(serializers.ModelSerializer):
+    volunteers = SimpleUserSerializer(many=True, read_only=True)
     organizer = OrganizerSerializer(read_only=True)  # Сериализует данные органайзера
 
     class Meta:
@@ -142,9 +171,34 @@ class ReviewSerializer(serializers.ModelSerializer):
         read_only_fields = ['organizer', 'created_at', 'updated_at']
 
 
-
 class PDFDocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = PDFDocument
         fields = ['id', 'title', 'pdf_file', 'created_at', 'updated_at']
         read_only_fields = ['organizer', 'created_at', 'updated_at']
+
+
+class MeetingSearchSerializer(serializers.ModelSerializer):
+    startDate = serializers.DateField(source='start_time.date', read_only=True)
+    endDate = serializers.DateField(source='end_time.date', read_only=True)
+    startTime = serializers.TimeField(source='start_time.time', read_only=True)
+    endTime = serializers.TimeField(source='end_time.time', read_only=True)
+    address = serializers.CharField(source='location', read_only=True)
+    categories = serializers.SerializerMethodField()  # Заглушка для категорий
+
+    class Meta:
+        model = Meeting
+        fields = [
+            'id',
+            'title',
+            'startDate',
+            'endDate',
+            'startTime',
+            'endTime',
+            'address',
+            'categories'
+        ]
+
+    def get_categories(self, obj):
+        # Заглушка - в текущей модели нет категорий
+        return []

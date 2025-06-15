@@ -7,7 +7,6 @@ from model_utils import FieldTracker
 User = get_user_model()
 
 
-
 class Volunteer(models.Model):
     """
     Модель для волонтера.
@@ -40,6 +39,35 @@ class Organizer(models.Model):
         verbose_name = "Организатор"
         verbose_name_plural = "Организаторы"
 
+
+class Notification(models.Model):
+    """
+    Модель для уведомлений пользователей.
+    """
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='notifications'
+    )
+    text = models.TextField(verbose_name="Текст уведомления")
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Дата создания"
+    )
+    is_read = models.BooleanField(
+        default=False,
+        verbose_name="Прочитано"
+    )
+
+    class Meta:
+        verbose_name = "Уведомление"
+        verbose_name_plural = "Уведомления"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Уведомление для {self.user.username}"
+
+
 class Meeting(models.Model):
     """
     Модель для встречи (мероприятия).
@@ -50,7 +78,13 @@ class Meeting(models.Model):
     location = models.CharField(max_length=255, help_text="Место проведения встречи.")
     start_time = models.DateTimeField(help_text="Дата и время начала встречи.")
     end_time = models.DateTimeField(help_text="Дата и время окончания встречи.")
-    max_participants = models.PositiveIntegerField(default=0, help_text="Максимальное количество участников. 0 - неограничено.")
+    max_participants = models.PositiveIntegerField(default=0,
+                                                   help_text="Максимальное количество участников. 0 - неограничено.")
+    volunteers = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through='VolunteerApplication',
+        related_name='registered_meetings'
+    )
 
     def __str__(self):
         return f"Встреча: {self.title} (Организатор: {self.organizer.user.username})"
@@ -67,14 +101,14 @@ class VolunteerApplication(models.Model):
     ]
 
     volunteer = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                  on_delete=models.CASCADE,
+                                  related_name='applications')
+    meeting = models.ForeignKey('Meeting',
                                 on_delete=models.CASCADE,
                                 related_name='applications')
-    meeting = models.ForeignKey('Meeting',
-                              on_delete=models.CASCADE,
-                              related_name='applications')
     status = models.CharField(max_length=10,
-                            choices=APPLICATION_STATUS,
-                            default='pending')
+                              choices=APPLICATION_STATUS,
+                              default='pending')
     applied_at = models.DateTimeField(auto_now_add=True)
     processed_at = models.DateTimeField(null=True, blank=True)
     organizer_comment = models.TextField(blank=True, verbose_name="Комментарий организатора")
@@ -89,9 +123,10 @@ class VolunteerApplication(models.Model):
     def save(self, *args, **kwargs):
         old_status = self.tracker.previous('status')
         super().save(*args, **kwargs)
-        if old_status != self.status:
-            from .tasks import send_status_email  # Импорт здесь чтобы избежать circular import
-            send_status_email.delay(self.id)
+        #if old_status != self.status:
+         #   from .tasks import send_status_email  # Импорт здесь чтобы избежать circular import
+          #  send_status_email.delay(self.id)
+
     def __str__(self):
         return f"{self.volunteer.username} -> {self.meeting.title} ({self.get_status_display()})"
 
@@ -105,6 +140,7 @@ class Review(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+
 class PDFDocument(models.Model):
     organizer = models.ForeignKey(Organizer, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
@@ -114,4 +150,6 @@ class PDFDocument(models.Model):
 
     def __str__(self):
         return self.title
-from . import signals
+
+
+

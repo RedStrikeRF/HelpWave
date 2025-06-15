@@ -7,32 +7,35 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 from .views import (
+    NotificationViewSet,
     UserViewSet,
     VolunteerViewSet,
     OrganizerViewSet,
     MeetingViewSet,
     ObtainTokenPairWithVolunteerOrOrganizerView,
-    VolunteerApplicationViewSet, ReviewViewSet, PDFDocumentViewSet,
+    VolunteerApplicationViewSet, ReviewViewSet, PDFDocumentViewSet, MeetingRegistrationViewSet, MeetingSearchView,
 )
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'volunteers', VolunteerViewSet)
 router.register(r'organizers', OrganizerViewSet)
+router.register(r'notifications', NotificationViewSet, basename='user-notifications')
 router.register(r'meetings', MeetingViewSet)
 router.register(r'applications', VolunteerApplicationViewSet, basename='applications')
 router.register(r'reviews', ReviewViewSet, basename='review')
 router.register(r'pdf-documents', PDFDocumentViewSet, basename='pdfdocument')
-
+router.register(r'meetings', MeetingRegistrationViewSet, basename='meetings-registration')
 urlpatterns = [
+    path('events/search/', MeetingSearchView.as_view(), name='events-search'),
     # Маршрут для получения токена (JWT)
-    path('token/', ObtainTokenPairWithVolunteerOrOrganizerView.as_view(), name='token_obtain_pair'),
+    path('auth/', ObtainTokenPairWithVolunteerOrOrganizerView.as_view(), name='token_obtain_pair'),
 
     # Маршрут для обновления токена (JWT)
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     # Маршрут для верификации токена (JWT)
-    path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('auth/verify/', TokenVerifyView.as_view(), name='token_verify'),
 
 
 

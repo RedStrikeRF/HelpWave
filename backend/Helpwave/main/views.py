@@ -1,5 +1,6 @@
 from datetime import timezone
 
+from django.db.models import Q
 from django.http import HttpResponse, FileResponse
 from django.shortcuts import render, get_object_or_404
 from rest_framework import serializers, viewsets, permissions, generics, status
@@ -7,12 +8,13 @@ from django.contrib.auth import get_user_model
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from datetime import datetime
-from .models import Volunteer, Organizer, Meeting, VolunteerApplication, Review, PDFDocument
+from .models import Volunteer, Organizer, Meeting, VolunteerApplication, Review, PDFDocument, Notification
 from .serializers import UserSerializer, VolunteerSerializer, OrganizerSerializer, MeetingSerializer, \
     VolunteerApplicationSerializer, VolunteerApplicationUpdateSerializer, VolunteerApplicationCreateSerializer, \
-    ReviewSerializer, PDFDocumentSerializer
+    ReviewSerializer, PDFDocumentSerializer, NotificationSerializer, MeetingSearchSerializer
 
 User = get_user_model()
 
@@ -41,6 +43,26 @@ class VolunteerViewSet(viewsets.ModelViewSet):
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
 
+    @action(detail=False, methods=['get', 'put', 'patch'])
+    def me(self, request):
+        # Получаем волонтера по текущему пользователю
+        volunteer = get_object_or_404(Volunteer, user=request.user)
+
+        if request.method in ['PUT', 'PATCH']:
+            # Для обновления данных
+            serializer = self.get_serializer(
+                volunteer,
+                data=request.data,
+                partial=request.method == 'PATCH'  # partial=True для PATCH
+            )
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+
+        # Для GET запроса
+        serializer = self.get_serializer(volunteer)
+        return Response(serializer.data)
+
 
 class OrganizerViewSet(viewsets.ModelViewSet):
     queryset = Organizer.objects.all()
@@ -53,6 +75,34 @@ class OrganizerViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
+
+    @action(detail=False, methods=['get', 'put', 'patch'])
+    def me(self, request):
+        organizer = get_object_or_404(Organizer, user=request.user)
+
+        if request.method in ['PUT', 'PATCH']:
+            serializer = self.get_serializer(
+                organizer,
+                data=request.data,
+                partial=request.method == 'PATCH'
+            )
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+
+        serializer = self.get_serializer(organizer)
+        return Response(serializer.data)
+
+
+class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = NotificationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('user_pk')
+        return Notification.objects.filter(
+            user_id=user_id
+        ).order_by('-created_at')
 
 
 class MeetingViewSet(viewsets.ModelViewSet):
@@ -307,3 +357,139 @@ class PDFDocumentViewSet(viewsets.ModelViewSet):
         response = FileResponse(pdf_doc.pdf_file)
         response['Content-Disposition'] = f'attachment; filename="{pdf_doc.title}.pdf"'
         return response
+
+
+class MeetingRegistrationViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @action(detail=True, methods=['post'], url_path='register')
+    def register(self, request, pk=None):
+        """
+        Запись волонтёра на мероприятие
+        POST /api/meetings/<id>/register/
+        """
+        meeting = get_object_or_404(Meeting, pk=pk)
+        user = request.user
+
+        # Проверка, что пользователь - волонтер
+        if not hasattr(user, 'volunteer_profile'):
+            return Response(
+                {"error": "Только волонтеры могут записываться на мероприятия"},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        # Проверка, не записан ли уже
+        if meeting.volunteers.filter(pk=user.pk).exists():
+            return Response(
+                {"error": "Вы уже записаны на это мероприятие"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Проверка максимального количества участников
+        if meeting.max_participants > 0 and meeting.volunteers.count() >= meeting.max_participants:
+            return Response(
+                {"error": "Мероприятие уже заполнено"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Создаем запись через промежуточную модель
+        VolunteerApplication.objects.create(
+            volunteer=user,
+            meeting=meeting,
+            status='approved'  # Автоматическое подтверждение
+        )
+
+        return Response(
+            {"message": "Вы записаны на мероприятие"},
+            status=status.HTTP_201_CREATED
+        )
+
+    @action(detail=True, methods=['delete'], url_path='unregister')
+    def unregister(self, request, pk=None):
+        """
+        Отмена записи на мероприятие
+        DELETE /api/meetings/<id>/unregister/
+        """
+        meeting = get_object_or_404(Meeting, pk=pk)
+        user = request.user
+
+        # Проверка, что запись существует
+        application = VolunteerApplication.objects.filter(
+            volunteer=user,
+            meeting=meeting
+        ).first()
+
+        if not application:
+            return Response(
+                {"error": "Вы не записаны на это мероприятие"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        application.delete()
+        return Response(
+            {"message": "Ваша запись на мероприятие отменена"},
+            status=status.HTTP_204_NO_CONTENT
+        )
+
+
+class MeetingSearchView(APIView):
+    def get(self, request):
+        # Извлечение параметров запроса
+        query = request.query_params.get('query', '')
+        location = request.query_params.get('location', '')
+        start_date = request.query_params.get('startDate')
+        end_date = request.query_params.get('endDate')
+        sort_by = request.query_params.get('sortBy', 'date_asc')
+        limit = int(request.query_params.get('limit', 10))
+        offset = int(request.query_params.get('offset', 0))
+
+        # Базовый запрос
+        meetings = Meeting.objects.all()
+
+        # Фильтрация по текстовому запросу
+        if query:
+            meetings = meetings.filter(
+                Q(title__icontains=query) |
+                Q(description__icontains=query)
+            )
+
+        # Фильтрация по местоположению
+        if location:
+            meetings = meetings.filter(location__icontains=location)
+
+        # Фильтрация по дате начала
+        if start_date:
+            try:
+                start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d').date()
+                meetings = meetings.filter(start_time__date__gte=start_date)
+            except ValueError:
+                pass
+
+        # Фильтрация по дате окончания
+        if end_date:
+            try:
+                end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d').date()
+                meetings = meetings.filter(end_time__date__lte=end_date)
+            except ValueError:
+                pass
+
+        # Сортировка
+        if sort_by == 'date_asc':
+            meetings = meetings.order_by('start_time')
+        elif sort_by == 'date_desc':
+            meetings = meetings.order_by('-start_time')
+        elif sort_by == 'newest':
+            meetings = meetings.order_by('-id')
+        # 'popularity' пока не реализовано - нет данных о популярности
+
+        # Пагинация
+        total = meetings.count()
+        meetings = meetings[offset:offset + limit]
+
+        # Сериализация результатов
+        serializer = MeetingSearchSerializer(meetings, many=True)
+
+        return Response({
+            'events': serializer.data,
+            'total': total
+        })
